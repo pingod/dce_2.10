@@ -1,0 +1,18 @@
+---
+- name: stop the kubelet service
+  service: 
+    name: kubelet 
+    state: stopped 
+    enabled: no
+  ignore_errors: true
+
+- name: clear dce-bootstrap
+  shell: docker rm -f dce-bootstrap > /dev/null 2>&1
+  ignore_errors: true
+
+- name: leave cluster
+  shell: docker run --name dce-bootstrap --rm -t -v /var/run/docker.sock:/var/run/docker.sock -v /etc/daocloud:/etc/daocloud -v /var/local:/var/local --network host {{ dce_image }} do-uninstall --force --quiet
+  register: result
+  until: result.stdout.find('Uninstalled DCE') != -1
+  retries: "{{ retries | default(3) }}"
+  delay: "{{ delay | default(10) }}"

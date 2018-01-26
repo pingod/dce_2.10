@@ -1,0 +1,6 @@
+---
+- name: generate init_script
+  shell: docker run --rm {{ dce_image }} install | sed 's/-it/-idt/g' > /var/tmp/init_cluster.sh
+
+- name: run init_script
+  shell: bash /var/tmp/init_cluster.sh

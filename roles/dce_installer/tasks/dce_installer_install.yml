@@ -1,0 +1,138 @@
+---
+- name: aliyun yum repo
+  yum_repository:
+    name: "{{ item.name }}"
+    description: "{{ item.description }}"
+    file: aliyun
+    baseurl: "{{ item.baseurl }}"
+    gpgcheck: no
+    enabled: "{{ enable_aliyun_repo | default('no') }}"
+  with_items:
+    - { name: 'base', description: 'CentOS-$releasever-Base', baseurl: 'https://mirrors.aliyun.com/centos/7/os/x86_64/' }
+    - { name: 'epel', description: 'CentOS-$releasever-epel', baseurl: 'https://mirrors.aliyun.com/epel/7/x86_64/' }
+    - { name: 'updates', description: 'CentOS-$releasever-updates', baseurl: 'https://mirrors.aliyun.com/centos/7/updates/x86_64/' }
+    - { name: 'extras', description: 'CentOS-$releasever-extras', baseurl: 'https://mirrors.aliyun.com/centos/7/extras/x86_64/' }
+
+- name: daocloud yum repo
+  yum_repository:
+    name: daocloud
+    description: DaoCloud
+    file: daocloud
+    baseurl: http://dao-packages.daocloud.io/centos/7.4.1708/daocloud/x86_64/stable
+    gpgcheck: no
+
+- name: docker-ce yum repo
+  yum_repository:
+    name: docker-ce-stable
+    description: Docker CE Stable - $basearch
+    file: docker-ce
+    baseurl: https://download.daocloud.io/docker/linux/centos/7/$basearch/stable
+    gpgcheck: yes
+    gpgkey: https://download.daocloud.io/docker/linux/centos/gpg
+
+- name: docker-ce extra yum repo
+  yum_repository:
+    name: "{{ item.name }}"
+    description: "{{ item.description }}"
+    file: docker-ce
+    baseurl: "{{ item.baseurl }}"
+    gpgcheck: yes
+    gpgkey: https://download.daocloud.io/docker/linux/centos/gpg
+    enabled: no
+  with_items:
+    - { name: 'docker-ce-stable-debuginfo', description: 'Docker CE Stable - Debuginfo $basearch', baseurl: 'https://download.daocloud.io/docker/linux/centos/7/debug-$basearch/stable' }
+    - { name: 'docker-ce-stable-source', description: 'Docker CE Stable - Sources', baseurl: 'https://download.daocloud.io/docker/linux/centos/7/source/stable' }
+    - { name: 'docker-ce-edge', description: 'Docker CE Edge - $basearch', baseurl: 'https://download.daocloud.io/docker/linux/centos/7/$basearch/edge' }
+    - { name: 'docker-ce-edge-debuginfo', description: 'Docker CE Edge - Debuginfo $basearch', baseurl: 'https://download.daocloud.io/docker/linux/centos/7/debug-$basearch/edge' }
+    - { name: 'docker-ce-edge-source', description: 'Docker CE Edge - Sources', baseurl: 'https://download.daocloud.io/docker/linux/centos/7/source/edge' }
+    - { name: 'docker-ce-test', description: 'Docker CE Test - $basearch', baseurl: 'https://download.daocloud.io/docker/linux/centos/7/$basearch/test' }
+    - { name: 'docker-ce-test-debuginfo', description: 'Docker CE Test - Debuginfo $basearch', baseurl: 'https://download.daocloud.io/docker/linux/centos/7/debug-$basearch/test' }
+    - { name: 'docker-ce-test-source', description: 'Docker CE Test - Sources', baseurl: 'https://download.daocloud.io/docker/linux/centos/7/source/test' }
+
+- name: install dce depends
+  yum: 
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  with_items:
+    - wget
+    - git
+    - net-tools
+    - bind-utils
+    - iptables-services
+    - bridge-utils
+    - bash-completion
+    - kexec-tools
+    - sos
+    - psacct
+    - chrony
+    - device-mapper-persistent-data
+    - lvm2
+    - audit
+    - systemd-journal-gateway
+    - socat
+    - ipvsadm
+
+- name: yum.conf obsoletes=0
+  ini_file:
+    path: /etc/yum.conf
+    section: main
+    option: obsoletes
+    value: 0
+
+- name: install kubelet-{{ kubelet_version }} & docker-ce-{{ docker_version }}
+  yum: 
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  with_items:
+    - kubelet-{{ kubelet_version }}
+    - docker-ce-{{ docker_version }}
+
+- name: yum.conf obsoletes=1
+  ini_file:
+    path: /etc/yum.conf
+    section: main
+    option: obsoletes
+    value: 1
+
+- name: systemd daemon-reload
+  systemd:
+    daemon-reload: yes
+
+- name: vg {{ vg_name }}
+  lvg:
+    vg: "{{ vg_name }}"
+    pvs: "{{ thinpool_disks }}"
+    pesize: "{{ vg_pe_size }}"
+    state: present
+  ignore_errors: true
+  tags: vg_create
+
+- name: thinpool {{ thinpool_name }}
+  lvol:
+    vg: "{{ vg_name }}"
+    lv: "{{ thinpool_name }}"
+    size: 100%FREE
+    opts: --type thin-pool --chunksize {{ thin_pool_chunk_size }}
+  ignore_errors: true
+  tags: thinpool_create
+
+- name: /dev/mapper/{{ vg_name }}-{{ thinpool_name }} exists ?
+  shell: ls /dev/mapper/{{ vg_name }}-{{ thinpool_name }}
+  register: thinpool_exists
+  ignore_errors: true
+
+- name: docker config
+  include_tasks: docker_config_thinpool.yml
+  when: thinpool_exists | succeeded
+
+- name: docker config no thinpool
+  include_tasks: docker_config_no_thinpool.yml
+  when: thinpool_exists | failed
+
+- name: start docker
+  service: 
+    name: docker
+    state: started 
+    enabled: yes

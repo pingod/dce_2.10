@@ -1,0 +1,80 @@
+---
+- name: stop kubelet & docker daemon
+  service:
+    name: "{{ item }}"
+    enabled: no
+    state: stopped
+  with_items:
+    - kubelet
+    - docker
+  ignore_errors: true
+
+- name: remove repos
+  file:
+    path: /etc/yum.repos.d/{{ item }}
+    state: absent
+  with_items:
+    - aliyun.repo
+    - daocloud.repo
+    - docker-ce.repo
+
+- name: uninstall kubelet-{{ kubelet_version }} & docker-ce-{{ docker_version }}
+  yum: 
+    name: "{{ item }}"
+    state: absent
+  with_items:
+    - kubelet-{{ kubelet_version }}
+    - docker-ce-{{ docker_version }}
+
+- name: clear kubelet & docker left directories
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - /etc/docker
+    - /var/lib/dockershim
+    - /var/lib/docker
+    - /etc/kubelet
+    - /etc/systemd/system/kubelet.service.d
+    - /var/lib/kubelet
+
+
+- name: thinpool
+  lvol:
+    vg: "{{ vg_name }}"
+    lv: "{{ thinpool_name }}"
+    state: absent
+    force: "{{ force_remove | default('no') }}"
+  ignore_errors: true
+  tags: thinpool_remove
+
+- name: vg
+  lvg:
+    vg: "{{ vg_name }}"
+    state: absent
+    force: "{{ force_remove | default('no') }}"
+  ignore_errors: true
+  tags: vg_remove
+
+- name: uninstall dce depends
+  yum: 
+    name: "{{ item }}"
+    state: absent
+  with_items:
+    - wget
+    - git
+    - net-tools
+    - bind-utils
+    - iptables-services
+    - bridge-utils
+    - bash-completion
+    - kexec-tools
+    - sos
+    - psacct
+    - chrony
+    - device-mapper-persistent-data
+    - audit
+    - systemd-journal-gateway
+    - socat
+    - ipvsadm
+

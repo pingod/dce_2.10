@@ -1,0 +1,67 @@
+---
+- name: SUBNET_172_STATE
+  shell: SUBNET_172_STATE=$(ip route | grep -v -E "(docker|br-)" | grep -cE "^172\.1[6-9]" | awk '{if($1 != 0){print "confliction"}else{print "no_confliction"}}') ; [[ $SUBNET_172_STATE = confliction ]]|| grep -cE "nameserver\s+172\.1[6-9]" /etc/resolv.conf|awk '{if($1 != 0){print "confliction"}else{print "no_confliction"}}'
+  register: subnet_172_state
+- set_fact: SUBNET_172_STATE={{ subnet_172_state.stdout }}
+
+- name: SUBNET_10_STATE
+  shell: SUBNET_10_STATE=$(ip route | grep -v -E "(docker|br-)" | grep -E "^10\.255" | awk '{if($1 != 0){print "confliction"}else{print "no_confliction"}}') ; [[ $SUBNET_10_STATE = confliction ]]|| grep -cE "^nameserver\s+10\.255" /etc/resolv.conf|awk '{if($1 != 0){print "confliction"}else{print "no_confliction"}}'
+  register: subnet_10_state
+- set_fact: SUBNET_10_STATE={{ subnet_10_state.stdout }}
+
+- name: KUBELET_VERSION
+  shell: kubelet --version 2>/dev/null
+  register: kubelet_version
+- set_fact: KUBELET_VERSION={{ kubelet_version.stdout }}
+
+- name: SELINUX_MODE
+  shell: sestatus | awk '{print $3}'
+  register: selinux_mode
+  ignore_errors: true
+- set_fact: SELINUX_MODE={{ selinux_mode.stdout }}
+
+- name: FIREWALLD_STATE
+  shell: firewall-cmd --state 2>&1
+  register: firewalld_state
+  ignore_errors: true
+- set_fact: FIREWALLD_STATE={{ firewalld_state.stdout }}
+
+- name: "{{ inventory_hostname }} in cluster ?"
+  uri:
+    url: http://{{ groups['seed'][0] }}/nodes
+    method: GET
+    return_content: yes
+  register: WEBPAGE
+  retries: "{{ retries | default(3) }}"
+  delay: "{{ delay | default(10) }}"
+  ignore_errors: true
+
+- name: get cluster JoinTokens
+  uri:
+    url: http://{{ groups['seed'][0] }}/swarm
+    method: GET
+    return_content: yes
+  register: JOINTOKENS
+  retries: "{{ retries | default(3) }}"
+  delay: "{{ delay | default(10) }}"
+  ignore_errors: true
+- set_fact: token="{% if 'manager' in group_names %}
+                        {{ JOINTOKENS.json.JoinTokens.Manager }}
+                   {% endif %}
+                   {% if 'worker' in group_names %}
+                        {{ JOINTOKENS.json.JoinTokens.Worker }}
+                   {% endif %}"
+
+- name: clear dce-bootstrap
+  shell: docker rm -f dce-bootstrap > /dev/null 2>&1
+  when: not WEBPAGE.content | search(inventory_hostname)
+  ignore_errors: true
+
+- name: join cluster
+  shell: docker run --name dce-bootstrap --rm -t -v /var/run/docker.sock:/var/run/docker.sock -v /etc/daocloud:/etc/daocloud -v /var/local:/var/local -e SUBNET_172_STATE="{{ SUBNET_172_STATE }}" -e SUBNET_10_STATE="{{ SUBNET_10_STATE }}" -e KUBELET_VERSION="{{ KUBELET_VERSION }}"  -e FIREWALLD_STATE="{{ FIREWALLD_STATE }}" -e SELINUX_MODE="{{ SELINUX_MODE }}" {{ dce_image }} do-join --quiet --token {{ token }} {{ groups['seed'][0] }}:2377 80
+  register: result
+  until: result.stdout.find('DCE Joined Successfully') != -1
+  retries: "{{ retries | default(3) }}"
+  delay: "{{ delay | default(10) }}"
+  when: (not WEBPAGE.content | search(inventory_hostname))
+  

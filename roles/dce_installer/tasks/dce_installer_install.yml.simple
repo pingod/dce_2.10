@@ -1,0 +1,8 @@
+---
+- name: fetch dce-installer binary to PATH(/usr/bin)
+  get_url:
+    url: "{{ dce_installer_binary_url }}"
+    dest: /usr/bin
+    owner: root
+    group: root
+    mode: 0755

@@ -1,0 +1,8 @@
+---
+- hosts: 
+    - manager
+    - worker
+  roles:
+    - manager_or_worker
+  vars_files: 
+    - dev/group_vars/all

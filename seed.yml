@@ -1,0 +1,8 @@
+---
+- hosts: 
+    - seed
+  roles:
+    - seed
+  vars_files: 
+    - dev/group_vars/all
+  tags: seed

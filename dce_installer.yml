@@ -1,0 +1,7 @@
+---
+- hosts: 
+    - all
+  roles:
+    - dce_installer
+  vars_files: 
+    - dev/group_vars/all

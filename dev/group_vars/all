@@ -1,0 +1,15 @@
+timezone: Asia/Shanghai
+domain_name: example.com
+ntp_server: time.nist.gov
+
+vg_name: vg001
+vg_pe_size: 32
+thinpool_disks: /dev/sdb
+thinpool_name: thinpool
+thin_pool_chunk_size: 256K
+
+docker_version: 17.03.2.ce
+kubelet_version: 1.7.11
+dce_version: 2.10.0
+dce_image: daocloud.io/daocloud/dce:{{ dce_version }}
+

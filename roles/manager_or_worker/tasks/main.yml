@@ -1,0 +1,3 @@
+---
+- import_tasks: manager_or_worker_{{ install_or_uninstall }}.yml
+  tags: manager_or_worker

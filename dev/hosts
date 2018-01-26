@@ -1,0 +1,16 @@
+[all:vars]
+ansible_user=root
+#ansible_password=dangerous
+#ansible_connection=paramiko
+
+[seed]
+192.168.130.11
+
+[manager]
+192.168.130.12
+192.168.130.13
+
+[worker]
+192.168.130.14
+192.168.130.15
+192.168.130.16
