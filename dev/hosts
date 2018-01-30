@@ -1,6 +1,6 @@
 [all:vars]
 ansible_user=root
-#ansible_password=dangerous
+#ansible_password=
 #ansible_connection=paramiko
 
 [seed]
