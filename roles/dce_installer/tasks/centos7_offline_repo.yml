@@ -1,0 +1,7 @@
+---
+- name: dce offline repo
+  yum_repository:
+    name: dce_offline
+    description: dce offline repo
+    baseurl: "{{ dce_offline_repo }}"
+    gpgcheck: no

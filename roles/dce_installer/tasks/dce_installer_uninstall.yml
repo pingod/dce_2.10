@@ -17,6 +17,7 @@
     - aliyun.repo
     - daocloud.repo
     - docker-ce.repo
+    - dce_offline.repo
 
 - name: uninstall kubelet-{{ kubelet_version }} & docker-ce-{{ docker_version }}
   yum: 

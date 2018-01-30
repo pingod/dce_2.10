@@ -26,7 +26,7 @@
   ignore_errors: true
 - set_fact: FIREWALLD_STATE={{ firewalld_state.stdout }}
 
-- name: "{{ inventory_hostname }} in cluster ?"
+- name: node in cluster ?
   uri:
     url: http://{{ groups['seed'][0] }}/nodes
     method: GET
@@ -58,7 +58,7 @@
   ignore_errors: true
 
 - name: join cluster
-  shell: docker run --name dce-bootstrap --rm -t -v /var/run/docker.sock:/var/run/docker.sock -v /etc/daocloud:/etc/daocloud -v /var/local:/var/local -e SUBNET_172_STATE="{{ SUBNET_172_STATE }}" -e SUBNET_10_STATE="{{ SUBNET_10_STATE }}" -e KUBELET_VERSION="{{ KUBELET_VERSION }}"  -e FIREWALLD_STATE="{{ FIREWALLD_STATE }}" -e SELINUX_MODE="{{ SELINUX_MODE }}" {{ dce_image }} do-join --quiet --token {{ token }} {{ groups['seed'][0] }}:2377 80
+  shell: docker run --name dce-bootstrap --rm -t -v /var/run/docker.sock:/var/run/docker.sock -v /etc/daocloud:/etc/daocloud -v /var/local:/var/local -e SUBNET_172_STATE="{{ SUBNET_172_STATE }}" -e SUBNET_10_STATE="{{ SUBNET_10_STATE }}" -e KUBELET_VERSION="{{ KUBELET_VERSION }}"  -e FIREWALLD_STATE="{{ FIREWALLD_STATE }}" -e SELINUX_MODE="{{ SELINUX_MODE }}" -e SELINUX_MODE="{{ SELINUX_MODE }}" -e HUB_PREFIX={{ dce_hub_prefix }} {{ dce_image }} do-join --quiet --token {{ token }} {{ groups['seed'][0] }}:2377 80
   register: result
   until: result.stdout.find('DCE Joined Successfully') != -1
   retries: "{{ retries | default(3) }}"
