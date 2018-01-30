@@ -1,5 +1,4 @@
 timezone: Asia/Shanghai
-domain_name: example.com
 ntp_server: time.nist.gov
 
 vg_name: vg001
