@@ -1,6 +1,6 @@
 - name: docker_config_thinpool
   template:
-    src: daemon.json
+    src: daemon.json.j2
     dest: /etc/docker/daemon.json
     owner: root
     group: root

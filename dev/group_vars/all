@@ -13,7 +13,7 @@ dce_version: 2.10.0
 ## 离线安装相关 ##
 ## 离线安装必须正确定义dce_offline_repo, dce_hub_prefix
 # dce离线yum源
-#dce_offline_repo: http://192.168.130.1:15000/repo/centos-7.4.1708
+#dce_offline_repo: http://192.168.4.210:15000/repo/centos-7.4.1708
 # dce离线镜像
-#dce_hub_prefix: 192.168.130.1:15000/daocloud
+#dce_hub_prefix: 192.168.4.210:15000/daocloud
 

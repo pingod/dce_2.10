@@ -11,10 +11,17 @@
 
 - set_fact: 
     node_meta="{% for node in WEBPAGE.json %} 
-                 {% if node.Status.Addr == inventory_hostname %}
-                     {{ node.ID }},{{ node.Spec.Role }},{{ node.Version.Index }}
-                 {% endif %}
+                   {% if node.get('ManagerStatus') %}
+                       {% if node['ManagerStatus']['Addr'].split(':')[0] == inventory_hostname %}
+                           {{ node.ID }},{{ node.Spec.Role }},{{ node.Version.Index }}
+                       {% endif %}
+                   {% else %}
+                       {% if node['Status']['Addr'] == inventory_hostname %}
+                           {{ node.ID }},{{ node.Spec.Role }},{{ node.Version.Index }}
+                       {% endif %}
+                   {% endif %}
                {% endfor %}"
+
 - set_fact: 
     node_id="{{ node_meta.strip().split(',')[0] }}"
     node_role="{{ node_meta.strip().split(',')[1] }}"
@@ -42,6 +49,7 @@
   until: result.stdout.find('Uninstalled DCE') != -1
   retries: "{{ RETRIES }}"
   delay: "{{ DELAY }}"
+  async: 10
 
 - name: rm {{ inventory_hostname }}
   uri:
