@@ -27,6 +27,17 @@
     - kubelet-{{ kubelet_version }}
     - docker-ce-{{ docker_version }}
 
+- name: filter mounted container dirs
+  shell: df
+  register: df_result
+
+- set_fact: DF_RESULT={{ df_result.stdout | regex_findall('(/var/lib/kubelet/pods/.+)') }}
+- name: unmount left pods 
+  mount:
+    path: "{{ item }}"
+    state: unmounted
+  with_items: "{{ DF_RESULT }}"
+
 - name: clear kubelet & docker left directories
   file:
     path: "{{ item }}"

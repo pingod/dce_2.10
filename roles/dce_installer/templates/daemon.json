@@ -1,7 +1,7 @@
 {
   "storage-driver": "devicemapper",
   "storage-opts": [
-    "dm.thinpooldev=/dev/mapper/{{ vg_name }}-{{ thinpool_name }}",
+    "dm.thinpooldev=/dev/mapper/{{ VG_NAME }}-{{ THINPOOL_NAME }}",
     "dm.basesize=50G",
     "dm.use_deferred_deletion=true",
     "dm.use_deferred_removal=true"

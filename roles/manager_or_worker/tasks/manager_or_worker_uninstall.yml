@@ -5,8 +5,8 @@
     method: GET
     return_content: yes
   register: WEBPAGE
-  retries: "{{ retries | default(3) }}"
-  delay: "{{ delay | default(10) }}"
+  retries: "{{ RETRIES }}"
+  delay: "{{ DELAY }}"
   ignore_errors: true
 
 - set_fact: 
@@ -28,8 +28,8 @@
     body_format: json
     status_code: 200
     return_content: yes
-  retries: "{{ retries | default(3) }}"
-  delay: "{{ delay | default(10) }}"
+  retries: "{{ RETRIES }}"
+  delay: "{{ DELAY }}"
   when: node_role == 'manager'
 
 - name: clear dce-bootstrap
@@ -37,11 +37,11 @@
   ignore_errors: true
 
 - name: dce uninstall
-  shell: docker run --name dce-bootstrap --rm -t -v /var/run/docker.sock:/var/run/docker.sock -v /etc/daocloud:/etc/daocloud -v /var/local:/var/local --network host {{ dce_image }} do-uninstall --force --quiet
+  shell: docker run --name dce-bootstrap --rm -t -v /var/run/docker.sock:/var/run/docker.sock -v /etc/daocloud:/etc/daocloud -v /var/local:/var/local --network host {{ DCE_HUB_PREFIX }}/dce:{{ dce_version }} do-uninstall --force --quiet
   register: result
   until: result.stdout.find('Uninstalled DCE') != -1
-  retries: "{{ retries | default(3) }}"
-  delay: "{{ delay | default(10) }}"
+  retries: "{{ RETRIES }}"
+  delay: "{{ DELAY }}"
 
 - name: rm {{ inventory_hostname }}
   uri:
@@ -49,8 +49,8 @@
     method: DELETE
     status_code: 200
   register: res
-  retries: "{{ retries | default(3) }}"
-  delay: "{{ delay | default(10) }}"
+  retries: "{{ RETRIES }}"
+  delay: "{{ DELAY }}"
 
 - name: stop the kubelet service
   service: 

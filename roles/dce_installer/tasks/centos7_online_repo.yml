@@ -5,7 +5,7 @@
     file: aliyun
     baseurl: "{{ item.baseurl }}"
     gpgcheck: no
-    enabled: "{{ enable_aliyun_repo | default('no') }}"
+    enabled: yes
   with_items:
     - { name: 'base', description: 'CentOS-$releasever-Base', baseurl: 'https://mirrors.aliyun.com/centos/7/os/x86_64/' }
     - { name: 'epel', description: 'CentOS-$releasever-epel', baseurl: 'https://mirrors.aliyun.com/epel/7/x86_64/' }

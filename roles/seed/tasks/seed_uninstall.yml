@@ -11,8 +11,8 @@
   ignore_errors: true
 
 - name: leave cluster
-  shell: docker run --name dce-bootstrap --rm -t -v /var/run/docker.sock:/var/run/docker.sock -v /etc/daocloud:/etc/daocloud -v /var/local:/var/local --network host {{ dce_image }} do-uninstall --force --quiet
+  shell: docker run --name dce-bootstrap --rm -t -v /var/run/docker.sock:/var/run/docker.sock -v /etc/daocloud:/etc/daocloud -v /var/local:/var/local --network host {{ DCE_HUB_PREFIX }}/dce:{{ dce_version }} do-uninstall --force --quiet
   register: result
   until: result.stdout.find('Uninstalled DCE') != -1
-  retries: "{{ retries | default(3) }}"
-  delay: "{{ delay | default(10) }}"
+  retries: "{{ RETRIES }}"
+  delay: "{{ DELAY }}"

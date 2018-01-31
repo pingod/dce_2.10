@@ -1,15 +1,19 @@
 timezone: Asia/Shanghai
 ntp_server: time.nist.gov
 
-vg_name: vg001
-vg_pe_size: 32
-thinpool_disks: /dev/sdb
-thinpool_name: thinpool
-thin_pool_chunk_size: 256K
+## devicemapper thinpool相关 ##
+# vg组成的磁盘,多块磁盘用','分隔,如/dev/sdb,/dev/sdc
+#thinpool_disks: /dev/sdb
 
+## docker, kubelet, dce版本 ##
 docker_version: 17.03.2.ce
 kubelet_version: 1.7.11
 dce_version: 2.10.0
-dce_offline_repo: http://192.168.130.1:15000/repo/centos-7.4.1708
-dce_hub_prefix: 192.168.130.1:15000/daocloud
-dce_image: "{{ dce_hub_prefix | default('daocloud.io/daocloud') }}/dce:{{ dce_version }}"
+
+## 离线安装相关 ##
+## 离线安装必须正确定义dce_offline_repo, dce_hub_prefix
+# dce离线yum源
+#dce_offline_repo: http://192.168.130.1:15000/repo/centos-7.4.1708
+# dce离线镜像
+#dce_hub_prefix: 192.168.130.1:15000/daocloud
+

@@ -82,34 +82,34 @@
     state: started 
     enabled: yes
 
-- name: vg {{ vg_name }}
+- name: vg {{ VG_NAME }}
   lvg:
-    vg: "{{ vg_name }}"
-    pvs: "{{ thinpool_disks }}"
-    pesize: "{{ vg_pe_size }}"
+    vg: "{{ VG_NAME }}"
+    pvs: "{{ THINPOOL_DISKS }}"
+    pesize: "{{ VG_PE_SIZE }}"
     state: present
   ignore_errors: true
   tags: vg_create
 
-- name: thinpool {{ thinpool_name }}
+- name: thinpool {{ THINPOOL_NAME }}
   lvol:
-    vg: "{{ vg_name }}"
-    lv: "{{ thinpool_name }}"
+    vg: "{{ VG_NAME }}"
+    lv: "{{ THINPOOL_NAME }}"
     size: 100%FREE
-    opts: --type thin-pool --chunksize {{ thin_pool_chunk_size }}
+    opts: --type thin-pool --chunksize {{ THIN_POOL_CHUNK_SIZE }}
   ignore_errors: true
   tags: thinpool_create
 
-- name: /dev/mapper/{{ vg_name }}-{{ thinpool_name }} exists ?
-  shell: ls /dev/mapper/{{ vg_name }}-{{ thinpool_name }}
+- name: /dev/mapper/{{ VG_NAME }}-{{ THINPOOL_NAME }} exists ?
+  stat: 
+    path: /dev/mapper/{{ VG_NAME }}-{{ THINPOOL_NAME }}
   register: thinpool_exists
-  ignore_errors: true
 
-- name: docker config
-  include_tasks: docker_config_thinpool.yml
-  when: thinpool_exists | succeeded
+- name: docker_config_thinpool
+  import_tasks: docker_config_thinpool.yml
+  when: thinpool_exists.stat.exists
 
-- name: docker config no thinpool
-  include_tasks: docker_config_no_thinpool.yml
-  when: thinpool_exists | failed
+- name: docker_config_no_thinpool
+  import_tasks: docker_config_no_thinpool.yml
+  when: not thinpool_exists.stat.exists
 

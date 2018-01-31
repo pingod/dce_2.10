@@ -1,4 +1,4 @@
-- name: docker config
+- name: docker_config_no_thinpool
   template:
     src: daemon_no_thinpool.json
     dest: /etc/docker/daemon.json

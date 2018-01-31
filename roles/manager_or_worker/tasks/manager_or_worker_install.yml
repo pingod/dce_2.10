@@ -32,8 +32,8 @@
     method: GET
     return_content: yes
   register: WEBPAGE
-  retries: "{{ retries | default(3) }}"
-  delay: "{{ delay | default(10) }}"
+  retries: "{{ RETRIES }}"
+  delay: "{{ DELAY }}"
   ignore_errors: true
 
 - name: get cluster JoinTokens
@@ -42,8 +42,8 @@
     method: GET
     return_content: yes
   register: JOINTOKENS
-  retries: "{{ retries | default(3) }}"
-  delay: "{{ delay | default(10) }}"
+  retries: "{{ RETRIES }}"
+  delay: "{{ DELAY }}"
   ignore_errors: true
 - set_fact: token="{% if 'manager' in group_names %}
                         {{ JOINTOKENS.json.JoinTokens.Manager }}
@@ -58,10 +58,10 @@
   ignore_errors: true
 
 - name: join cluster
-  shell: docker run --name dce-bootstrap --rm -t -v /var/run/docker.sock:/var/run/docker.sock -v /etc/daocloud:/etc/daocloud -v /var/local:/var/local -e SUBNET_172_STATE="{{ SUBNET_172_STATE }}" -e SUBNET_10_STATE="{{ SUBNET_10_STATE }}" -e KUBELET_VERSION="{{ KUBELET_VERSION }}"  -e FIREWALLD_STATE="{{ FIREWALLD_STATE }}" -e SELINUX_MODE="{{ SELINUX_MODE }}" -e SELINUX_MODE="{{ SELINUX_MODE }}" -e HUB_PREFIX={{ dce_hub_prefix }} {{ dce_image }} do-join --quiet --token {{ token }} {{ groups['seed'][0] }}:2377 80
+  shell: docker run --name dce-bootstrap --rm -t -v /var/run/docker.sock:/var/run/docker.sock -v /etc/daocloud:/etc/daocloud -v /var/local:/var/local -e SUBNET_172_STATE="{{ SUBNET_172_STATE }}" -e SUBNET_10_STATE="{{ SUBNET_10_STATE }}" -e KUBELET_VERSION="{{ KUBELET_VERSION }}"  -e FIREWALLD_STATE="{{ FIREWALLD_STATE }}" -e SELINUX_MODE="{{ SELINUX_MODE }}" -e SELINUX_MODE="{{ SELINUX_MODE }}" -e HUB_PREFIX={{ DCE_HUB_PREFIX }} {{ DCE_HUB_PREFIX }}/dce:{{ dce_version }} do-join --quiet --token {{ token }} {{ groups['seed'][0] }}:2377 80
   register: result
   until: result.stdout.find('DCE Joined Successfully') != -1
-  retries: "{{ retries | default(3) }}"
-  delay: "{{ delay | default(10) }}"
+  retries: "{{ RETRIES }}"
+  delay: "{{ DELAY }}"
   when: (not WEBPAGE.content | search(inventory_hostname))
   
