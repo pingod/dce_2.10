@@ -1,10 +1,4 @@
 ---
-- name: restart docker
-  service: 
-    name: docker 
-    state: restarted
-    enabled: yes
-
 - name: restart chrony
   service: 
     name: chronyd

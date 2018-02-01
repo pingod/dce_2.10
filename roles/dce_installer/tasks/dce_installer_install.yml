@@ -72,16 +72,6 @@
     option: obsoletes
     value: 1
 
-- name: systemd daemon-reload
-  systemd:
-    daemon-reload: yes
-
-- name: start docker
-  service: 
-    name: docker
-    state: started 
-    enabled: yes
-
 - name: vg {{ VG_NAME }}
   lvg:
     vg: "{{ VG_NAME }}"
@@ -105,6 +95,14 @@
     path: /dev/mapper/{{ VG_NAME }}-{{ THINPOOL_NAME }}
   register: thinpool_exists
 
+- name: create docker configuration directory(/etc/docker)
+  file:
+    path: /etc/docker
+    state: directory
+    owner: root
+    group: root
+    mode: 0700
+
 - name: docker_config_thinpool
   import_tasks: docker_config_thinpool.yml
   when: thinpool_exists.stat.exists
@@ -113,3 +111,12 @@
   import_tasks: docker_config_no_thinpool.yml
   when: not thinpool_exists.stat.exists
 
+- name: systemd daemon-reload
+  systemd:
+    daemon-reload: yes
+
+- name: start docker
+  service: 
+    name: docker
+    state: started 
+    enabled: yes

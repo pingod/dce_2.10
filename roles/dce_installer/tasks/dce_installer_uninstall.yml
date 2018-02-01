@@ -49,6 +49,7 @@
     - /etc/kubelet
     - /etc/systemd/system/kubelet.service.d
     - /var/lib/kubelet
+    - /usr/local/bin/kubectl
 
 
 - name: thinpool

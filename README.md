@@ -1,7 +1,17 @@
 ## 部署前准备 ##
-- 己安装好centos 7.4操作系统
-- 配置主机列表**dev/hosts**
-- 定义变量**dev/group_vars/all**
+1. 己安装好centos 7.4操作系统
+2. 准备ansible环境
+
+``` shell
+# 安装pip
+yum -y install python-setuptools
+easy_install pip
+# 安装ansible
+pip install ansible
+```
+
+3.  配置主机列表**dev/hosts**
+4.  定义变量**dev/group_vars/all**
 
 -------------------------------------------------------------------------------
 
