@@ -1,11 +1,12 @@
 ---
-- name: yum repo
-  include_tasks: centos7_online_repo.yml
-  when: not offline | default(false)
-
-- name: yum repo
-  include_tasks: centos7_offline_repo.yml
-  when: offline | default(false)
+- include_tasks: timezone.yml
+- include_tasks: selinux.yml
+- include_tasks: firewalld.yml
+- include_tasks: hostname.yml
+- include_tasks: centos7_online_repo.yml
+  when: not (DCE_OFFLINE_REPO != '' and DCE_HUB_PREFIX != 'daocloud.io')
+- include_tasks: centos7_offline_repo.yml
+  when: DCE_OFFLINE_REPO != '' and DCE_HUB_PREFIX != 'daocloud.io'
 
 - name: yum.conf skip_broken=1
   ini_file:
@@ -104,11 +105,11 @@
     mode: 0700
 
 - name: docker_config_thinpool
-  import_tasks: docker_config_thinpool.yml
+  include_tasks: docker_config_thinpool.yml
   when: thinpool_exists.stat.exists
 
 - name: docker_config_no_thinpool
-  import_tasks: docker_config_no_thinpool.yml
+  include_tasks: docker_config_no_thinpool.yml
   when: not thinpool_exists.stat.exists
 
 - name: systemd daemon-reload

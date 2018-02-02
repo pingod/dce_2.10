@@ -1,5 +1,0 @@
----
-- import_tasks: timezone.yml
-- import_tasks: selinux.yml
-- import_tasks: firewalld.yml
-- import_tasks: hostname.yml

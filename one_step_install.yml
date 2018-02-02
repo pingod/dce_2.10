@@ -1,5 +1,4 @@
 ---
-- import_playbook: common.yml
 - import_playbook: dce_installer.yml
 - import_playbook: seed.yml
 - import_playbook: manager_or_worker.yml

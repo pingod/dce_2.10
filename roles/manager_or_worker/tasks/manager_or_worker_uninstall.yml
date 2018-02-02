@@ -3,6 +3,9 @@
   uri:
     url: http://{{ groups['seed'][0] }}/nodes
     method: GET
+    user: "{{ vault_dce_user }}"
+    password: "{{ vault_dce_password }}"
+    status_code: 200
     return_content: yes
   register: WEBPAGE
   retries: "{{ RETRIES }}"
@@ -33,6 +36,8 @@
     method: POST
     body: {"Availability": "active", "Role": "worker"}
     body_format: json
+    user: "{{ vault_dce_user }}"
+    password: "{{ vault_dce_password }}"
     status_code: 200
     return_content: yes
   retries: "{{ RETRIES }}"
@@ -46,7 +51,6 @@
 - name: dce uninstall
   shell: docker run --name dce-bootstrap --rm -t -v /var/run/docker.sock:/var/run/docker.sock -v /etc/daocloud:/etc/daocloud -v /var/local:/var/local --network host {{ DCE_HUB_PREFIX }}/dce:{{ dce_version }} do-uninstall --force --quiet
   register: result
-  until: result.stdout.find('Uninstalled DCE') != -1
   retries: "{{ RETRIES }}"
   delay: "{{ DELAY }}"
   async: 10
@@ -55,6 +59,8 @@
   uri:
     url: http://{{ groups['seed'][0] }}/nodes/{{ node_id }}
     method: DELETE
+    user: "{{ vault_dce_user }}"
+    password: "{{ vault_dce_password }}"
     status_code: 200
   register: res
   retries: "{{ RETRIES }}"
