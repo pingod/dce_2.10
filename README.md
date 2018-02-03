@@ -13,17 +13,17 @@ pip install ansible
 3.  配置主机列表**dev/hosts**  
 	- seed是种子节点,用来初始化集群,只能是一个ip地址
 	- manager是manager节点组
-	- worker是worker节点
+	- worker是worker节点组
 4.  定义变量**dev/group_vars/all**
 > **注意:** 对于敏感数据，如远程用户名密码及dce认证用户名密码, 请事先通过以下脚本生成密文
 ``` shell
 VAULT_ID='myVAULT@2018'
 echo $VAULT_ID > ~/.vault_pass.txt
 
-ANSIBLE_USER='root'
-ANSIBLE_PASSWORD='root'
-DCE_USER='foo'
-DCE_PASSWORD='bar'
+ANSIBLE_USER='root' # 远程操作用户名
+ANSIBLE_PASSWORD='root' # 远程操作用户密码，如果通过密钥认证可以删除该变量及下面对应的加密步骤
+DCE_USER='foo' # dce认证用户
+DCE_PASSWORD='bar' # dce认证用户密码
 
 ansible-vault encrypt_string --vault-id ~/.vault_pass.txt $ANSIBLE_USER --name 'vault_ansible_user' | tee dev/group_vars/vault
 ansible-vault encrypt_string --vault-id ~/.vault_pass.txt $ANSIBLE_PASSWORD --name 'vault_ansible_password' | tee -a dev/group_vars/vault
