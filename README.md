@@ -10,12 +10,12 @@ easy_install pip
 pip install ansible
 ```
 
-3.  配置主机列表**dev/hosts**
-seed是种子节点, 用来初始化集群，只能是一个ip
-manager是manager节点组
-worker是worker节点
+3.  配置主机列表**dev/hosts**  
+	- seed是种子节点, 用来初始化集群，只能是一个ip
+	- manager是manager节点组
+	- worker是worker节点
 4.  定义变量**dev/group_vars/all**
-> **注意:**对于敏感数据，如远程用户名密码及dce认证用户名密码, 请事先通过以下脚本生成密文
+> **注意:** 对于敏感数据，如远程用户名密码及dce认证用户名密码, 请事先通过以下脚本生成密文
 ``` shell
 VAULT_ID='myVAULT@2018'
 echo $VAULT_ID > ~/.vault_pass.txt
@@ -62,7 +62,7 @@ cd /tmp/dce-2.10.0
 > v. 设置离线环境变量
 
 dev/group_vas/all
-注意:**离线**安装请一定正确配置变量**dce_offline_repo, dce_hub_prefix**
+注意: **离线** 安装请一定正确配置变量 **dce_offline_repo, dce_hub_prefix**
 ``` yaml
 dce_offline_repo: http://192.168.130.1:15000/repo/centos-7.4.1708
 dce_hub_prefix: 192.168.130.1:15000/daocloud  
@@ -86,7 +86,7 @@ ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt --extra-va
 - ### 在线安装(公网拉镜像) ###
 > 在线安装相比离线安装少了第一步(准备离线源), 其它步骤完全一样  
 
-注意:**在线**安装请一定**注释或删除**变量**dce_offline_repo, dce_hub_prefix**
+注意: **在线** 安装请一定 **注释或删除** 变量 **dce_offline_repo, dce_hub_prefix**
 
 -------------------------------------------------------------------------------
 
