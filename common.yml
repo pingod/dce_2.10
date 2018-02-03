@@ -1,8 +1,0 @@
----
-- hosts: 
-    - all
-  roles:
-    - common
-  vars_files: 
-    - dev/group_vars/all
-  tags: common
