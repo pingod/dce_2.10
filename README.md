@@ -1,5 +1,5 @@
 ## 部署前准备 ##
-1. 己安装好centos 7.4操作系统
+1. 己安装好centos 7.3/7.4操作系统
 2. 准备ansible环境
 
 ``` shell
@@ -11,7 +11,7 @@ pip install ansible
 ```
 
 3.  配置主机列表**dev/hosts**  
-	- seed是种子节点, 用来初始化集群，只能是一个ip
+	- seed是种子节点,用来初始化集群,只能是一个ip地址
 	- manager是manager节点组
 	- worker是worker节点
 4.  定义变量**dev/group_vars/all**
@@ -25,10 +25,10 @@ ANSIBLE_PASSWORD='root'
 DCE_USER='foo'
 DCE_PASSWORD='bar'
 
-ansible-vault encrypt_string --vault-id dev@~/.vault_pass.txt $ANSIBLE_USER --name 'vault_ansible_user' | tee dev/group_vars/vault
-ansible-vault encrypt_string --vault-id dev@~/.vault_pass.txt $ANSIBLE_PASSWORD --name 'vault_ansible_password' | tee -a dev/group_vars/vault
-ansible-vault encrypt_string --vault-id dev@~/.vault_pass.txt $DCE_USER --name 'vault_dce_user' | tee -a dev/group_vars/vault
-ansible-vault encrypt_string --vault-id dev@~/.vault_pass.txt $DCE_PASSWORD --name 'vault_dce_password' | tee -a dev/group_vars/vault
+ansible-vault encrypt_string --vault-id ~/.vault_pass.txt $ANSIBLE_USER --name 'vault_ansible_user' | tee dev/group_vars/vault
+ansible-vault encrypt_string --vault-id ~/.vault_pass.txt $ANSIBLE_PASSWORD --name 'vault_ansible_password' | tee -a dev/group_vars/vault
+ansible-vault encrypt_string --vault-id ~/.vault_pass.txt $DCE_USER --name 'vault_dce_user' | tee -a dev/group_vars/vault
+ansible-vault encrypt_string --vault-id ~/.vault_pass.txt $DCE_PASSWORD --name 'vault_dce_password' | tee -a dev/group_vars/vault
 ```
 
 -------------------------------------------------------------------------------
@@ -61,7 +61,7 @@ cd /tmp/dce-2.10.0
 
 > v. 设置离线环境变量
 
-dev/group_vas/all
+dev/group_vas/all  
 注意: **离线** 安装请一定正确配置变量 **dce_offline_repo, dce_hub_prefix**
 ``` yaml
 dce_offline_repo: http://192.168.130.1:15000/repo/centos-7.4.1708
@@ -86,13 +86,12 @@ ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt --extra-va
 - ### 在线安装(公网拉镜像) ###
 > 在线安装相比离线安装少了第一步(准备离线源), 其它步骤完全一样  
 
-注意: **在线** 安装请一定 **注释或删除** 变量 **dce_offline_repo, dce_hub_prefix**
+注意: **在线**安装请一定 **注释或删除** 变量 **dce_offline_repo, dce_hub_prefix**
 
 -------------------------------------------------------------------------------
 
 - ### 卸载 ###
-> **注意:** 卸载需谨慎，请小心操作。
-> 将install置为uninstall,如
+> **注意:** 卸载需谨慎, 请小心操作。将install置为uninstall,如
 ```
 ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt --extra-vars install_or_uninstall=uninstall manager_or_worker.yml 
 ```
