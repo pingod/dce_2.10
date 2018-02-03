@@ -62,7 +62,7 @@ cd /tmp/dce-2.10.0
 > v. 设置离线环境变量
 
 dev/group_vas/all  
-注意: **离线** 安装请一定正确配置变量 **dce_offline_repo, dce_hub_prefix**
+注意: **离线**安装请一定正确配置变量**dce_offline_repo, dce_hub_prefix**
 ``` yaml
 dce_offline_repo: http://192.168.130.1:15000/repo/centos-7.4.1708
 dce_hub_prefix: 192.168.130.1:15000/daocloud  
@@ -86,7 +86,7 @@ ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt --extra-va
 - ### 在线安装(公网拉镜像) ###
 > 在线安装相比离线安装少了第一步(准备离线源), 其它步骤完全一样  
 
-注意: **在线**安装请一定 **注释或删除** 变量 **dce_offline_repo, dce_hub_prefix**
+注意: **在线**安装请一定**注释或删除**变量**dce_offline_repo, dce_hub_prefix**
 
 -------------------------------------------------------------------------------
 
