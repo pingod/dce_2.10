@@ -49,11 +49,7 @@
   ignore_errors: true
 
 - name: dce uninstall
-  shell: docker run --name dce-bootstrap --rm -t -v /var/run/docker.sock:/var/run/docker.sock -v /etc/daocloud:/etc/daocloud -v /var/local:/var/local --network host {{ DCE_HUB_PREFIX }}/dce:{{ dce_version }} do-uninstall --force --quiet
-  register: result
-  retries: "{{ RETRIES }}"
-  delay: "{{ DELAY }}"
-  async: 10
+  shell: docker run --name dce-bootstrap --rm -t -v /var/run/docker.sock:/var/run/docker.sock -v /etc/daocloud:/etc/daocloud -v /var/local:/var/local --network host {{ DCE_HUB_PREFIX }}/dce:{{ dce_version }} do-uninstall --force --quiet && sleep 10
 
 - name: rm {{ inventory_hostname }}
   uri:
@@ -62,7 +58,6 @@
     user: "{{ vault_dce_user }}"
     password: "{{ vault_dce_password }}"
     status_code: 200
-  register: res
   retries: "{{ RETRIES }}"
   delay: "{{ DELAY }}"
 
@@ -72,4 +67,3 @@
     state: stopped 
     enabled: no
   ignore_errors: true
-
