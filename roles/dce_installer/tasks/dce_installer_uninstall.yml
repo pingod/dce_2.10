@@ -54,8 +54,8 @@
 
 - name: thinpool
   lvol:
-    vg: "{{ vg_name }}"
-    lv: "{{ thinpool_name }}"
+    vg: "{{ VG_NAME }}"
+    lv: "{{ THINPOOL_NAME }}"
     state: absent
     force: "{{ force_remove | default('no') }}"
   ignore_errors: true
@@ -63,7 +63,7 @@
 
 - name: vg
   lvg:
-    vg: "{{ vg_name }}"
+    vg: "{{ VG_NAME }}"
     state: absent
     force: "{{ force_remove | default('no') }}"
   ignore_errors: true
