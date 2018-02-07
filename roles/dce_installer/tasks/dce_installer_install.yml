@@ -87,7 +87,7 @@
     vg: "{{ VG_NAME }}"
     lv: "{{ THINPOOL_NAME }}"
     size: 100%FREE
-    opts: --type thin-pool --chunksize {{ THIN_POOL_CHUNK_SIZE }}
+    opts: --type thin-pool --zero n --chunksize {{ THIN_POOL_CHUNK_SIZE }}
   ignore_errors: true
   tags: thinpool_create
 
