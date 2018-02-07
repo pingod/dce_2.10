@@ -50,6 +50,7 @@
 
 - name: dce uninstall
   shell: docker run --name dce-bootstrap --rm -t -v /var/run/docker.sock:/var/run/docker.sock -v /etc/daocloud:/etc/daocloud -v /var/local:/var/local --network host {{ DCE_HUB_PREFIX }}/dce:{{ dce_version }} do-uninstall --force --quiet && sleep 10
+  tags: dce_uninstall
 
 - name: rm {{ inventory_hostname }}
   uri:
