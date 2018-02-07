@@ -82,12 +82,21 @@
   ignore_errors: true
   tags: vg_create
 
+- name: _VG_SIZE
+  shell: vgs --noheadings --nosuffix --units s -o vg_size {{ VG_NAME }}
+  register: res_VG_SIZE
+  ignore_errors: true
+
+- set_fact: 
+    _META_SIZE={{ res_VG_SIZE.stdout / 1000 + 1 }}
+  ignore_errors: true
+
 - name: thinpool {{ THINPOOL_NAME }}
   lvol:
     vg: "{{ VG_NAME }}"
     lv: "{{ THINPOOL_NAME }}"
     size: 100%FREE
-    opts: --type thin-pool --zero n --chunksize {{ THIN_POOL_CHUNK_SIZE }}
+    opts: --type thin-pool --zero n --chunksize {{ THIN_POOL_CHUNK_SIZE }} --poolmetadatasize {{ _META_SIZE }}s
   ignore_errors: true
   tags: thinpool_create
 
