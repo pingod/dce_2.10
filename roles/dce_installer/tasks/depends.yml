@@ -1,0 +1,48 @@
+- name: yum.conf skip_broken=1
+  ini_file:
+    path: /etc/yum.conf
+    section: main
+    option: skip_broken
+    value: 1
+
+- name: install dce depends
+  yum: 
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  with_items:
+    - wget
+    - git
+    - net-tools
+    - bind-utils
+    - iptables-services
+    - bridge-utils
+    - bash-completion
+    - kexec-tools
+    - sos
+    - psacct
+    - chrony
+    - device-mapper-persistent-data
+    - lvm2
+    - audit
+    - socat
+    - ipvsadm
+
+- name: yum.conf skip_broken=0
+  ini_file:
+    path: /etc/yum.conf
+    section: main
+    option: skip_broken
+    value: 0
+
+- name: configure chrony
+  template:
+    src: chrony.conf.j2
+    dest: /etc/chrony.conf
+  notify: restart chrony
+
+- name: start the chrony service
+  service:
+    name: chronyd
+    state: started
+    enabled: yes

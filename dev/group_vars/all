@@ -3,7 +3,7 @@ ntp_server: 192.168.130.254
 
 ## devicemapper thinpool相关 ##
 # vg组成的磁盘,多块磁盘用','分隔,如/dev/sdb,/dev/sdc
-#thinpool_disks: /dev/sdb
+thinpool_disks: /dev/sdb
 
 ## docker, kubelet, dce版本 ##
 docker_version: 17.03.2.ce
