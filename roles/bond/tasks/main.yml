@@ -1,0 +1,71 @@
+- name: install needed network manager libs
+  yum:
+    name: '{{ item }}'
+    state: installed
+  with_items:
+    - NetworkManager-glib
+
+- set_fact: 
+    ip1=ansible_{{ nmcli_bond1['ifname1'] }}
+    ip2=ansible_{{ nmcli_bond2['ifname1'] }}
+- name: try nmcli add bond1
+  nmcli:
+    type: bond
+    conn_name: "{{ nmcli_bond1['conn_name'] }}"
+    ip4: "{{ hostvars[inventory_hostname][ip1]['ipv4']['address'] }}"
+    gw4: "{{ nmcli_bond1['gw4'] }}"
+    dns4: "{{ nmcli_bond1['dns4'] }}"
+    mode: "{{ nmcli_bond1['mode'] }}"
+    state: present
+  ignore_errors: true
+
+- name: try nmcli add bond2
+  nmcli:
+    type: bond
+    conn_name: "{{ nmcli_bond2['conn_name'] }}"
+    ip4: "{{ hostvars[inventory_hostname][ip2]['ipv4']['address'] }}"
+    gw4: "{{ nmcli_bond2['gw4'] }}"
+    dns4: "{{ nmcli_bond1['dns4'] }}"
+    mode: "{{ nmcli_bond2['mode'] }}"
+    state: present
+  ignore_errors: true
+
+- name: try nmcli add bond-slave
+  nmcli:
+    type: bond-slave
+    conn_name: "{{ item.conn_name }}"
+    ifname: '{{ item.ifname }}'
+    master: "{{ item.master }}"
+    state: present
+    dns4: None
+  with_items:
+    - { conn_name: "{{ nmcli_bond1['ifname1'] }}", ifname: "{{ nmcli_bond1['ifname1'] }}", master: "{{ nmcli_bond1['conn_name'] }}" }
+    - { conn_name: "{{ nmcli_bond1['ifname2'] }}", ifname: "{{ nmcli_bond1['ifname2'] }}", master: "{{ nmcli_bond1['conn_name'] }}" }
+    - { conn_name: "{{ nmcli_bond2['ifname1'] }}", ifname: "{{ nmcli_bond2['ifname1'] }}", master: "{{ nmcli_bond2['conn_name'] }}" }
+    - { conn_name: "{{ nmcli_bond2['ifname2'] }}", ifname: "{{ nmcli_bond2['ifname2'] }}", master: "{{ nmcli_bond2['conn_name'] }}" }
+  ignore_errors: true
+
+- name: generate /etc/sysconfig/network-scripts/ifcfg-{{ nmcli_bond1['ifname1'] }}
+  copy:
+    remote_src: yes
+    src: /etc/sysconfig/network-scripts/ifcfg-{{ nmcli_bond1['ifname2'] }}
+    dest: /etc/sysconfig/network-scripts/ifcfg-{{ nmcli_bond1['ifname1'] }}
+    owner: root
+    group: root
+    mode: 0644
+
+- name: update device name
+  replace:
+    path: /etc/sysconfig/network-scripts/ifcfg-{{ nmcli_bond1['ifname1'] }}
+    regexp: "{{ nmcli_bond1['ifname2'] }}"
+    replace: "{{ nmcli_bond1['ifname1'] }}"
+
+- name: gernerate UUID
+  shell: uuidgen
+  register: uuidgen_state
+
+- name: update UUID
+  lineinfile:
+    path: /etc/sysconfig/network-scripts/ifcfg-{{ nmcli_bond1['ifname1'] }}
+    regexp: '^UUID=.*'
+    line: 'UUID={{ uuidgen_state.stdout }}'
