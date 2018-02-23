@@ -14,7 +14,9 @@ pip install ansible
 	- seed是种子节点,用来初始化集群,只能是一个ip地址
 	- manager是manager节点组
 	- worker是worker节点组
-4.  定义变量**dev/group_vars/all**
+4.  定义变量
+	- **dev/group_vars/all**
+	- **dev/group_vars/vault**
 > **注意:** 对于敏感数据，如远程用户名密码及dce认证用户名密码, 请事先通过以下脚本生成密文
 ``` shell
 VAULT_ID='myVAULT@2018'
