@@ -46,6 +46,16 @@
   include_tasks: docker_config_no_thinpool.yml
   when: not thinpool_exists.stat.exists
 
+- name: tune docker.service
+  ini_file:
+    path: /lib/systemd/system/docker.service
+    section: Service
+    option: "{{ item.option }}"
+    value: "{{ item.value }}"
+  with_items:
+    - { option: Restart, value: on-failure }
+    - { option: RestartSec, value: 3 }
+
 - name: systemd daemon-reload
   systemd:
     daemon-reload: yes
