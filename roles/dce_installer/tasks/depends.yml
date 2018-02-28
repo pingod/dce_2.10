@@ -1,9 +1,12 @@
-- name: yum.conf skip_broken=1
+- name: yum.conf skip_broken=1, obsoletes=0
   ini_file:
     path: /etc/yum.conf
     section: main
-    option: skip_broken
-    value: 1
+    option: "{{ item.option }}"
+    value: "{{ item.value }}"
+  with_items:
+    - { option: skip_broken, value: 1 }
+    - { option: obsoletes, value: 0 }
 
 - name: install dce depends
   yum: 
@@ -28,12 +31,15 @@
     - socat
     - ipvsadm
 
-- name: yum.conf skip_broken=0
+- name: yum.conf skip_broken=0, obsoletes=1
   ini_file:
     path: /etc/yum.conf
     section: main
-    option: skip_broken
-    value: 0
+    option: "{{ item.option }}"
+    value: "{{ item.value }}"
+  with_items:
+    - { option: skip_broken, value: 0 }
+    - { option: obsoletes, value: 1 }
 
 - name: configure chrony
   template:

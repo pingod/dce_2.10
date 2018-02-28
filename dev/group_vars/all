@@ -1,5 +1,5 @@
 timezone: Asia/Shanghai
-ntp_server: 192.168.130.254
+ntp_server: ntp1.aliyun.com
 domain_name: example.com
 
 ## devicemapper thinpool相关 ##

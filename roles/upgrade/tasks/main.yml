@@ -7,7 +7,7 @@
     group: root
     mode: 0755
 
-- name: pull dce {{ dce_version }}
+- name: pull dce {{ upgrade_version }}
   shell: bash /tmp/dce_upgrade.sh
 
 - name: clean dce_upgrade.sh
@@ -38,17 +38,24 @@
 - set_fact: FIREWALLD_STATE={{ firewalld_state.stdout }}
 
 - name: get dce version
-  shell: docker ps|grep 'dce-agent:{{ dce_version }}'
-  register: res_version
+  uri:
+    url: http://{{ groups['seed'][0] }}/dce/version
+    method: GET
+    return_content: yes
+    timeout: 10
+  register: WEBPAGE
+  retries: "{{ RETRIES }}"
+  delay: "{{ DELAY }}"
   ignore_errors: true
 
 - name: clear dce-bootstrap
   shell: docker rm -f dce-bootstrap > /dev/null 2>&1
-  when: not res_version.stdout
+  when: WEBPAGE.json.DCEVersion != upgrade_version 
   ignore_errors: true
 
-- name: upgrade dce {{ dce_version }}
-  shell: docker run --name dce-bootstrap --rm -t -v /var/run/docker.sock:/var/run/docker.sock -v /etc/daocloud:/etc/daocloud -v /var/local:/var/local -e KUBELET_VERSION="{{ KUBELET_VERSION }}" -e HOST_HOSTNAME="{{ HOST_HOSTNAME }}"  -e FIREWALLD_STATE="{{ FIREWALLD_STATE }}" -e SELINUX_MODE="{{ SELINUX_MODE }}" daocloud.io/daocloud/dce:{{ dce_version }} do-upgrade --quiet
+- name: upgrade dce {{ upgrade_version }}
+  shell: docker run --name dce-bootstrap --rm -t -v /var/run/docker.sock:/var/run/docker.sock -v /etc/daocloud:/etc/daocloud -v /var/local:/var/local -e KUBELET_VERSION="{{ KUBELET_VERSION }}" -e HOST_HOSTNAME="{{ HOST_HOSTNAME }}"  -e FIREWALLD_STATE="{{ FIREWALLD_STATE }}" -e SELINUX_MODE="{{ SELINUX_MODE }}" daocloud.io/daocloud/dce:{{ upgrade_version }} do-upgrade --quiet
   retries: "{{ RETRIES }}"
   delay: "{{ DELAY }}"
-  when: not res_version.stdout
+  when: WEBPAGE.json.DCEVersion != upgrade_version 
+  tags: upgrade
