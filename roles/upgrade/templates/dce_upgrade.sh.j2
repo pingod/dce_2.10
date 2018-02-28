@@ -1,0 +1,22 @@
+#!/bin/bash
+dce_images="
+dce-kube-controller
+dce-etcd
+dce-agent
+dce
+dce-controller
+dce-flannel
+dce-kube-proxy
+dce-calico-node
+dce-calico-kube-controllers
+dce-calico-cni
+dce-kube-dns-sidecar
+dce-kube-dns
+dce-kube-dnsmasq-nanny
+dce-kube-pause"
+for image in $dce_images
+do
+	docker pull {{ dce_hub_prefix }}/$image:{{ dce_version }}
+	docker tag {{ dce_hub_prefix }}/$image:{{ dce_version }} daocloud.io/daocloud/$image:{{ dce_version }}
+	docker rmi -f {{ dce_hub_prefix }}/$image:{{ dce_version }}
+done

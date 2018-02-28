@@ -1,0 +1,4 @@
+---
+DCE_HUB_PREFIX: "{{ dce_hub_prefix | default('daocloud.io/daocloud') }}"
+RETRIES: "{{ retries | default(3) }}"
+DELAY: "{{ delay | default(10) }}"

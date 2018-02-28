@@ -1,5 +1,6 @@
 timezone: Asia/Shanghai
 ntp_server: 192.168.130.254
+domain_name: example.com
 
 ## devicemapper thinpool相关 ##
 # vg组成的磁盘,多块磁盘用','分隔,如/dev/sdb,/dev/sdc

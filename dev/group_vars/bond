@@ -6,12 +6,12 @@ nmcli_bond1:
   dns4: 
     - 114.114.114.114
     - 8.8.8.8
-  mode: active-backup
+  mode: balance-alb
   ifname1: ens33
   ifname2: ens37
 nmcli_bond2:
   conn_name: storage
   gw4: 172.16.19.2
-  mode: 802.3ad
+  mode: balance-alb
   ifname1: ens38
   ifname2: ens39
