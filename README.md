@@ -110,3 +110,21 @@ ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt --extra-va
 ```
 ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt --extra-vars install_or_uninstall=uninstall manager_or_worker.yml 
 ```
+
+-------------------------------------------------------------------------------
+
+- ### 离线升级 ###
+> **注意:** 使用待升级的离线源版本，离线源配置同上
+#### 1. 定义变量 ####
+dev/group_vas/all  
+- upgrade_version: 2.10.1
+- upgrade_hub_prefix: 192.168.130.1:15000/daocloud
+#### 2. pull升级镜像(所有manager, worker节点) ####
+```
+ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt upgrade_image.yml
+```
+#### 3. 升级 ####
+> **注意:** 升级只需升级manager节点中的任意一台即可，待升级完成后，其它manager节点和worker节点会自动升级到对应版本
+```
+ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt upgrade.yml
+```
