@@ -50,10 +50,23 @@ scp dce-2.10.0.tar root@192.168.130.1:/tmp
 ```
 
 > iii. 启用离线源
-
 ```shell
+export VERSION=2.10.0
+
 ssh root@192.168.130.1
-tar -xvf /tmp/dce-2.10.0.tar -C /tmp
+tar -xvf /tmp/dce-$VERSION.tar -C /tmp
+
+cat > /etc/yum.repos.d/dce.repo <<EOF
+[dce]
+name=dce
+baseurl=/tmp/dce-$VERSION/repo/centos-7.4.1708
+gpgcheck=0
+enabled=1
+EOF
+yum -y install docker-ce
+systemctl start docker
+
+# 以容器方式运行registry, 默认端口为15000, 既提供dce离线镜像也提供docker, k8s等依赖包
 cd /tmp/dce-2.10.0
 ./dce-installer up-installer-registry --image-path=dce-installer-registry.tar
 ```
