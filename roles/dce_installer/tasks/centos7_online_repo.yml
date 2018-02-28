@@ -1,3 +1,14 @@
+- name: remove repos
+  file:
+    path: /etc/yum.repos.d
+    state: absent
+
+- name: create empty yum.repos.d
+  file:
+    path: /etc/yum.repos.d
+    state: directory
+    mode: 0755
+
 - name: aliyun yum repo
   yum_repository:
     name: "{{ item.name }}"

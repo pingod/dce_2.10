@@ -1,6 +1,7 @@
 timezone: Asia/Shanghai
 ntp_server: ntp1.aliyun.com
 domain_name: example.com
+hostname_prefix: dce
 
 ## devicemapper thinpool相关 ##
 # vg组成的磁盘,多块磁盘用','分隔,如/dev/sdb,/dev/sdc
@@ -18,3 +19,7 @@ dce_offline_repo: http://192.168.130.1:15000/repo/centos-7.4.1708
 # dce离线镜像
 dce_hub_prefix: 192.168.130.1:15000/daocloud
 
+## 版本升级 ##
+## 适合小版本升级，如: 2.10.0升级到2.10.1
+upgrade_version: 2.10.1
+upgrade_hub_prefix: 192.168.130.1:15000/daocloud

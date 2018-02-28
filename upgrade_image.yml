@@ -4,7 +4,7 @@
     - manager
     - worker
   roles:
-    - upgrade
+    - upgrade_image
   vars_files: 
     - dev/group_vars/all
     - dev/group_vars/vault
