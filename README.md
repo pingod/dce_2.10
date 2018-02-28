@@ -59,7 +59,7 @@ tar -xvf /tmp/dce-$VERSION.tar -C /tmp
 cat > /etc/yum.repos.d/dce.repo <<EOF
 [dce]
 name=dce
-baseurl=/tmp/dce-$VERSION/repo/centos-7.4.1708
+baseurl=file:///tmp/dce-$VERSION/repo/centos-7.4.1708
 gpgcheck=0
 enabled=1
 EOF
