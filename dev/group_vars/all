@@ -4,13 +4,13 @@ domain_name: example.com
 hostname_prefix: dce
 
 ## devicemapper thinpool相关 ##
-# vg组成的磁盘,多块磁盘用','分隔,如/dev/sdb,/dev/sdc
+# 组成vg的磁盘列表,多块磁盘用','分隔,如/dev/sdb,/dev/sdc
 thinpool_disks: /dev/sdb
 
 ## docker, kubelet, dce版本 ##
 docker_version: 17.03.2.ce
 kubelet_version: 1.7.11
-dce_version: 2.10.0
+dce_version: 2.10.1
 
 ## 离线安装相关 ##
 ## 离线安装必须正确定义dce_offline_repo, dce_hub_prefix; 在线安装, 请一定注释这两个变量
@@ -21,5 +21,5 @@ dce_hub_prefix: 192.168.130.1:15000/daocloud
 
 ## 版本离线升级 ##
 ## 适合小版本离线升级，如: 2.10.0升级到2.10.1
-upgrade_version: 2.10.1
-upgrade_hub_prefix: 192.168.130.1:15000/daocloud
+#upgrade_version: 2.10.1
+#upgrade_hub_prefix: 192.168.130.1:15000/daocloud
