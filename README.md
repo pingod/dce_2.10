@@ -33,10 +33,12 @@ ansible-vault encrypt_string --vault-id ~/.vault_pass.txt $ANSIBLE_PASSWORD --na
 ansible-vault encrypt_string --vault-id ~/.vault_pass.txt $DCE_USER --name 'vault_dce_user' | tee -a dev/group_vars/vault
 ansible-vault encrypt_string --vault-id ~/.vault_pass.txt $DCE_PASSWORD --name 'vault_dce_password' | tee -a dev/group_vars/vault
 ```
+  
+
+
+
 
 -------------------------------------------------------------------------------
-
-
 - ### 离线安装(内网拉镜像) ###
 
 #### 1. 搭建离线源 ####
@@ -96,24 +98,35 @@ ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt --extra-va
 ```
 ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt --extra-vars install_or_uninstall=install manager_or_worker.yml 
 ```
+  
+
+
+
+
 
 -------------------------------------------------------------------------------
-
 - ### 在线安装(公网拉镜像) ###
 > 在线安装相比离线安装少了第一步(准备离线源), 其它步骤完全一样  
 
 注意: **在线**安装请一定**注释或删除**变量**dce_offline_repo, dce_hub_prefix**
+  
+
+
+
 
 -------------------------------------------------------------------------------
-
 - ### 卸载 ###
 > **注意:** 卸载需谨慎, 请小心操作。将install置为uninstall,如
 ```
 ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt --extra-vars install_or_uninstall=uninstall manager_or_worker.yml 
 ```
+  
+
+
+
+
 
 -------------------------------------------------------------------------------
-
 - ### 离线升级 ###
 > **注意:** 使用待升级的离线源版本，离线源配置同上
 #### 1. 定义变量 ####
