@@ -120,12 +120,12 @@ ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt --extra-va
 dev/group_vas/all  
 - upgrade_version: 2.10.1
 - upgrade_hub_prefix: 192.168.130.1:15000/daocloud
-#### 2. pull升级镜像(所有manager, worker节点) ####
+#### 2. pull新版dce镜像(所有manager, worker节点) ####
 ```
 ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt upgrade_image.yml
 ```
 #### 3. 升级 ####
-> **注意:** 升级只需升级manager节点中的任意一台即可，待升级完成后，其它manager节点和worker节点会自动升级到对应版本
+> **注意:** 只需升级manager节点中的任意一台即可，待升级完成后，其它manager节点和worker节点会自动升级到对应版本
 ```
 ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt upgrade.yml
 ```
