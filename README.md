@@ -71,8 +71,9 @@ baseurl=file:///tmp/dce-$DCE_VERSION/repo/centos-$OS_VERSION
 gpgcheck=0
 enabled=1
 EOF
-yum -y install docker-ce
+yum -y --disablerepo=\* --enablerepo=dce install docker-ce
 systemctl start docker
+rm -rf /etc/yum.repos.d/dce.repo
 
 # 以容器方式运行registry, 默认端口为15000, 既提供dce离线镜像也提供docker, k8s等依赖包
 cd /tmp/dce-$DCE_VERSION
