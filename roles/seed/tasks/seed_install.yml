@@ -63,7 +63,7 @@
          -e FIREWALLD_STATE="{{ FIREWALLD_STATE }}" 
          -e SELINUX_MODE="{{ SELINUX_MODE }}" 
          -e HUB_PREFIX={{ DCE_HUB_PREFIX }} {{ DCE_HUB_PREFIX }}/dce:{{ dce_version }} 
-         do-install --quiet
+         do-install --quiet --advertise-addr {{ inventory_hostname }} 
   register: result
   until: result.stdout.find('DCE Controller Installed Successfully') != -1
   retries: "{{ RETRIES }}"
