@@ -21,5 +21,5 @@ dce_hub_prefix: 192.168.130.1:15000/daocloud
 
 ## 版本离线升级 ##
 ## 适合小版本离线升级，如: 2.10.0升级到2.10.1
-upgrade_version: 2.10.1
-upgrade_hub_prefix: 192.168.130.1:15000/daocloud
+#upgrade_version: 2.10.1
+#upgrade_hub_prefix: 192.168.130.1:15000/daocloud
