@@ -48,7 +48,22 @@
   ignore_errors: true
 
 - name: init cluster
-  shell: docker run --name dce-bootstrap --rm -t -v /var/run/docker.sock:/var/run/docker.sock -v /etc/daocloud:/etc/daocloud -v /var/local:/var/local -e SUBNET_172_STATE="{{ SUBNET_172_STATE }}" -e SUBNET_10_STATE="{{ SUBNET_10_STATE }}" -e KUBELET_VERSION="{{ KUBELET_VERSION }}" -e HOST_HOSTNAME="{{ HOST_HOSTNAME }}" -e FIREWALLD_STATE="{{ FIREWALLD_STATE }}" -e SELINUX_MODE="{{ SELINUX_MODE }}" -e HUB_PREFIX={{ DCE_HUB_PREFIX }} {{ DCE_HUB_PREFIX }}/dce:{{ dce_version }} do-install --quiet
+  shell: > 
+         docker run 
+         --name dce-bootstrap 
+         --rm 
+         -t 
+         -v /var/run/docker.sock:/var/run/docker.sock 
+         -v /etc/daocloud:/etc/daocloud 
+         -v /var/local:/var/local 
+         -e SUBNET_172_STATE="{{ SUBNET_172_STATE }}" 
+         -e SUBNET_10_STATE="{{ SUBNET_10_STATE }}" 
+         -e KUBELET_VERSION="{{ KUBELET_VERSION }}" 
+         -e HOST_HOSTNAME="{{ HOST_HOSTNAME }}" 
+         -e FIREWALLD_STATE="{{ FIREWALLD_STATE }}" 
+         -e SELINUX_MODE="{{ SELINUX_MODE }}" 
+         -e HUB_PREFIX={{ DCE_HUB_PREFIX }} {{ DCE_HUB_PREFIX }}/dce:{{ dce_version }} 
+         do-install --quiet
   register: result
   until: result.stdout.find('DCE Controller Installed Successfully') != -1
   retries: "{{ RETRIES }}"
