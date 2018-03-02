@@ -13,7 +13,8 @@ dce-calico-cni
 dce-kube-dns-sidecar
 dce-kube-dns
 dce-kube-dnsmasq-nanny
-dce-kube-pause"
+dce-kube-pause
+dce-hly"
 for image in $dce_images
 do
 	docker pull {{ upgrade_hub_prefix }}/$image:{{ upgrade_version }}

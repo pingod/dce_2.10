@@ -1,4 +1,19 @@
 ---
+- name: get dce version
+  uri:
+    url: http://{{ groups['seed'][0] }}/dce/version
+    method: GET
+    return_content: yes
+    timeout: 10
+  register: WEBPAGE
+  retries: "{{ RETRIES }}"
+  delay: "{{ DELAY }}"
+  ignore_errors: true
+
+- fail: msg="already {{ upgrade_version }}"
+  when: WEBPAGE.json.DCEVersion == upgrade_version 
+  tags: fail_tag
+
 - name: KUBELET_VERSION
   shell: kubelet --version 2>/dev/null
   register: kubelet_version
@@ -21,20 +36,8 @@
   ignore_errors: true
 - set_fact: FIREWALLD_STATE={{ firewalld_state.stdout }}
 
-- name: get dce version
-  uri:
-    url: http://{{ groups['seed'][0] }}/dce/version
-    method: GET
-    return_content: yes
-    timeout: 10
-  register: WEBPAGE
-  retries: "{{ RETRIES }}"
-  delay: "{{ DELAY }}"
-  ignore_errors: true
-
 - name: clear dce-bootstrap
   shell: docker rm -f dce-bootstrap > /dev/null 2>&1
-  when: WEBPAGE.json.DCEVersion != upgrade_version 
   ignore_errors: true
 
 - name: upgrade dce {{ upgrade_version }}
@@ -54,5 +57,4 @@
          do-upgrade --quiet
   retries: "{{ RETRIES }}"
   delay: "{{ DELAY }}"
-  when: WEBPAGE.json.DCEVersion != upgrade_version 
   tags: upgrade
