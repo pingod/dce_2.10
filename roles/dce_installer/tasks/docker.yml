@@ -2,6 +2,8 @@
   yum: 
     name: "{{ item }}"
     state: present
+    disablerepo: "*"
+    enablerepo: dce_offline
     update_cache: yes
   with_items:
     - kubelet-{{ kubelet_version }}

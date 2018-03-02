@@ -10,7 +10,7 @@ thinpool_disks: /dev/sdb
 ## docker, kubelet, dce版本 ##
 docker_version: 17.03.2.ce
 kubelet_version: 1.7.11
-dce_version: 2.10.1
+dce_version: 2.10.0
 
 ## 离线安装相关 ##
 ## 离线安装必须正确定义dce_offline_repo, dce_hub_prefix; 在线安装, 请一定注释这两个变量

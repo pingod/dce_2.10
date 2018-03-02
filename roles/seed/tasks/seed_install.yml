@@ -14,6 +14,11 @@
   register: kubelet_version
 - set_fact: KUBELET_VERSION={{ kubelet_version.stdout }}
 
+- name: HOST_HOSTNAME
+  shell: hostname
+  register: hostname
+- set_fact: HOST_HOSTNAME={{ hostname.stdout }}
+
 - name: SELINUX_MODE
   shell: sestatus | awk '{print $3}'
   register: selinux_mode
@@ -43,7 +48,7 @@
   ignore_errors: true
 
 - name: init cluster
-  shell: docker run --name dce-bootstrap --rm -t -v /var/run/docker.sock:/var/run/docker.sock -v /etc/daocloud:/etc/daocloud -v /var/local:/var/local -e SUBNET_172_STATE="{{ SUBNET_172_STATE }}" -e SUBNET_10_STATE="{{ SUBNET_10_STATE }}" -e KUBELET_VERSION="{{ KUBELET_VERSION }}"  -e FIREWALLD_STATE="{{ FIREWALLD_STATE }}" -e SELINUX_MODE="{{ SELINUX_MODE }}" -e HUB_PREFIX={{ DCE_HUB_PREFIX }} {{ DCE_HUB_PREFIX }}/dce:{{ dce_version }} do-install --quiet
+  shell: docker run --name dce-bootstrap --rm -t -v /var/run/docker.sock:/var/run/docker.sock -v /etc/daocloud:/etc/daocloud -v /var/local:/var/local -e SUBNET_172_STATE="{{ SUBNET_172_STATE }}" -e SUBNET_10_STATE="{{ SUBNET_10_STATE }}" -e KUBELET_VERSION="{{ KUBELET_VERSION }}" -e HOST_HOSTNAME="{{ HOST_HOSTNAME }}" -e FIREWALLD_STATE="{{ FIREWALLD_STATE }}" -e SELINUX_MODE="{{ SELINUX_MODE }}" -e HUB_PREFIX={{ DCE_HUB_PREFIX }} {{ DCE_HUB_PREFIX }}/dce:{{ dce_version }} do-install --quiet
   register: result
   until: result.stdout.find('DCE Controller Installed Successfully') != -1
   retries: "{{ RETRIES }}"
