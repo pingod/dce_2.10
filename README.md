@@ -20,18 +20,22 @@ pip install ansible
 	- **dev/group_vars/vault**
 > **注意:** 对于敏感数据，如远程用户名密码及dce认证用户名密码, 请事先通过以下脚本生成密文
 ``` shell
+cat <<EOF > vault.sh
 VAULT_ID='myVAULT@2018'
 echo $VAULT_ID > ~/.vault_pass.txt
 
 ANSIBLE_USER='root' # 远程操作用户名
 ANSIBLE_PASSWORD='root' # 远程操作用户密码，如果通过密钥认证可以删除该变量及下面对应的加密步骤
-DCE_USER='foo' # dce认证用户
-DCE_PASSWORD='bar' # dce认证用户密码
+DCE_USER='admin' # dce认证用户
+DCE_PASSWORD='admin' # dce认证用户密码
 
 ansible-vault encrypt_string --vault-id ~/.vault_pass.txt $ANSIBLE_USER --name 'vault_ansible_user' | tee dev/group_vars/vault
 ansible-vault encrypt_string --vault-id ~/.vault_pass.txt $ANSIBLE_PASSWORD --name 'vault_ansible_password' | tee -a dev/group_vars/vault
 ansible-vault encrypt_string --vault-id ~/.vault_pass.txt $DCE_USER --name 'vault_dce_user' | tee -a dev/group_vars/vault
 ansible-vault encrypt_string --vault-id ~/.vault_pass.txt $DCE_PASSWORD --name 'vault_dce_password' | tee -a dev/group_vars/vault
+EOF
+
+bash vault.sh
 ```
   
 
@@ -42,7 +46,7 @@ ansible-vault encrypt_string --vault-id ~/.vault_pass.txt $DCE_PASSWORD --name '
 - ### 离线安装(内网拉镜像) ###
 
 #### 1. 搭建离线源 ####
-> i. 下载离线安装包**dce-2.10.0.tar**  
+> i. 下载离线安装包**dce-2.10.x.tar**  
 
 [准备离线安装源](http://guide.daocloud.io/dce-v2.10/离线安装控制节点-13871615.html)  
 
@@ -54,15 +58,16 @@ scp dce-2.10.0.tar root@192.168.130.1:/tmp
 
 > iii. 启用离线源
 ```shell
-export VERSION=2.10.0
-
 ssh root@192.168.130.1
-tar -xvf /tmp/dce-$VERSION.tar -C /tmp
+
+export DCE_VERSION=2.10.0
+export OS_VERSION=7.4.1708
+tar -xvf /tmp/dce-$DCE_VERSION.tar -C /tmp
 
 cat > /etc/yum.repos.d/dce.repo <<EOF
 [dce]
 name=dce
-baseurl=file:///tmp/dce-$VERSION/repo/centos-7.4.1708
+baseurl=file:///tmp/dce-$DCE_VERSION/repo/centos-$OS_VERSION
 gpgcheck=0
 enabled=1
 EOF
@@ -70,7 +75,7 @@ yum -y install docker-ce
 systemctl start docker
 
 # 以容器方式运行registry, 默认端口为15000, 既提供dce离线镜像也提供docker, k8s等依赖包
-cd /tmp/dce-2.10.0
+cd /tmp/dce-$DCE_VERSION
 ./dce-installer up-installer-registry --image-path=dce-installer-registry.tar
 ```
 > iv. 测试离线源可用性
