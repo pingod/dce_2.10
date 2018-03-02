@@ -123,8 +123,17 @@ ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt --extra-va
 -------------------------------------------------------------------------------
 - ### 卸载 ###
 > **注意:** 卸载需谨慎, 请小心操作。将install置为uninstall,如
+#### 1. 卸载manager或worker节点 ####
 ```
 ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt --extra-vars install_or_uninstall=uninstall manager_or_worker.yml 
+```
+#### 2. 卸载seed节点 ####
+```
+ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt --extra-vars install_or_uninstall=install seed.yml 
+```
+#### 2. 卸载dce依赖包(docker, k8s) ####
+```
+ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt --extra-vars install_or_uninstall=install dce_installer.yml 
 ```
   
 
