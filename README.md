@@ -20,7 +20,7 @@ pip install ansible
 	- **dev/group_vars/vault**
 > **注意:** 对于敏感数据，如远程用户名密码及dce认证用户名密码, 请事先通过以下脚本生成密文
 ``` shell
-cat <<EOF > vault.sh
+cat <<'EOF' > vault.sh
 VAULT_ID='myVAULT@2018'
 echo $VAULT_ID > ~/.vault_pass.txt
 
@@ -37,7 +37,7 @@ EOF
 
 bash vault.sh
 ```
-  
+
 
 
 
@@ -56,7 +56,9 @@ bash vault.sh
 scp dce-2.10.0.tar root@192.168.130.1:/tmp
 ```
 
-> iii. 启用离线源
+> iii. 启用离线源ls
+>
+> 
 ```shell
 ssh root@192.168.130.1
 
@@ -85,7 +87,7 @@ cd /tmp/dce-$DCE_VERSION
 
 > v. 设置离线环境变量
 
-dev/group_vas/all  
+dev/group_vars/all  
 注意: **离线**安装请一定正确配置变量**dce_offline_repo, dce_hub_prefix**
 ``` yaml
 dce_offline_repo: http://192.168.130.1:15000/repo/centos-7.4.1708
@@ -104,7 +106,6 @@ ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt --extra-va
 ```
 ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt --extra-vars install_or_uninstall=install manager_or_worker.yml 
 ```
-  
 
 
 
@@ -115,7 +116,7 @@ ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt --extra-va
 > 在线安装相比离线安装少了第一步(准备离线源), 其它步骤完全一样  
 
 注意: **在线**安装请一定**注释或删除**变量**dce_offline_repo, dce_hub_prefix**
-  
+
 
 
 
@@ -135,7 +136,6 @@ ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt --extra-va
 ```
 ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt --extra-vars install_or_uninstall=uninstall dce_installer.yml 
 ```
-  
 
 
 
@@ -145,7 +145,7 @@ ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt --extra-va
 - ### 离线升级 ###
 > **注意:** 使用待升级的离线源版本，离线源配置同上
 #### 1. 定义变量 ####
-dev/group_vas/all  
+dev/group_vars/all  
 ```
 upgrade_version: 2.10.1
 upgrade_hub_prefix: 192.168.130.1:15000/daocloud
