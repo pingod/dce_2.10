@@ -21,3 +21,5 @@
   tags: depends
 - include_tasks: docker.yml
   tags: docker
+- include_tasks: docker_network.yml
+  tags: docker_network

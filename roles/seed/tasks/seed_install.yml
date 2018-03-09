@@ -20,13 +20,13 @@
 - set_fact: HOST_HOSTNAME={{ hostname.stdout }}
 
 - name: SELINUX_MODE
-  shell: sestatus | awk '{print $3}'
+  shell: sestatus 2>/dev/null | grep "Current mode" | awk '{print $3}'
   register: selinux_mode
   ignore_errors: true
 - set_fact: SELINUX_MODE={{ selinux_mode.stdout }}
 
 - name: FIREWALLD_STATE
-  shell: firewall-cmd --state 2>&1
+  shell: firewall-cmd --state 2>/dev/null | sed -r 's/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g'
   register: firewalld_state
   ignore_errors: true
 - set_fact: FIREWALLD_STATE={{ firewalld_state.stdout }}
@@ -63,7 +63,7 @@
          -e FIREWALLD_STATE="{{ FIREWALLD_STATE }}" 
          -e SELINUX_MODE="{{ SELINUX_MODE }}" 
          -e HUB_PREFIX={{ DCE_HUB_PREFIX }} {{ DCE_HUB_PREFIX }}/dce:{{ dce_version }} 
-         do-install --quiet --advertise-addr {{ inventory_hostname }} 
+         do-install --quiet --advertise-addr {{ inventory_hostname }} --pod-cluster-cidr {{ POD_CLUSTER_CIDR }}
   register: result
   until: result.stdout.find('DCE Controller Installed Successfully') != -1
   retries: "{{ RETRIES }}"

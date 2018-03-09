@@ -53,7 +53,7 @@ bash vault.sh
 > ii. 将离线包上传到一台安装有docker环境的主机，如: 192.168.130.1
 
 ``` shell
-scp dce-2.10.0.tar root@192.168.130.1:/tmp
+scp dce-2.10.1.tar root@192.168.130.1:/tmp
 ```
 
 > iii. 启用离线源ls
@@ -62,7 +62,7 @@ scp dce-2.10.0.tar root@192.168.130.1:/tmp
 ```shell
 ssh root@192.168.130.1
 
-export DCE_VERSION=2.10.0
+export DCE_VERSION=2.10.1
 export OS_VERSION=7.4.1708
 tar -xvf /tmp/dce-$DCE_VERSION.tar -C /tmp
 
@@ -152,7 +152,7 @@ upgrade_hub_prefix: 192.168.130.1:15000/daocloud
 ```
 #### 2. pull新版dce镜像(所有manager, worker节点) ####
 ```
-ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt upgrade_image.yml
+ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt sync_image.yml
 ```
 #### 3. 升级 ####
 > **注意:** 只需升级manager节点中的任意一台即可，待升级完成后，其它manager节点和worker节点会自动升级到对应版本

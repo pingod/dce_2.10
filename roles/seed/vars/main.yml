@@ -2,3 +2,4 @@
 DCE_HUB_PREFIX: "{{ dce_hub_prefix | default('daocloud.io/daocloud') }}"
 RETRIES: "{{ retries | default(3) }}"
 DELAY: "{{ delay | default(10) }}"
+POD_CLUSTER_CIDR: "{{ pod_cluster_cidr | default('172.28.0.0/16') }}"

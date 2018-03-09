@@ -1,16 +1,16 @@
 ---
-- name: sync dce_upgrade.sh
+- name: sync sync_image.sh
   template:
-    src: upgrade_image.sh.j2
-    dest: /tmp/upgrade_image.sh
+    src: sync_image.sh.j2
+    dest: /tmp/sync_image.sh
     owner: root
     group: root
     mode: 0755
 
 - name: pull dce {{ upgrade_version }}
-  shell: bash /tmp/upgrade_image.sh
+  shell: bash /tmp/sync_image.sh
 
 - name: clean dce_upgrade.sh
   file:
-    path: /tmp/upgrade_image.sh
+    path: /tmp/sync_image.sh
     state: absent

@@ -3,3 +3,8 @@
   service: 
     name: chronyd
     state: restarted
+
+- name: restart docker
+  service: 
+    name: docker
+    state: restarted
