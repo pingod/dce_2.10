@@ -147,8 +147,8 @@ ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt --extra-va
 #### 1. 定义变量 ####
 dev/group_vars/all  
 ```
-upgrade_version: 2.10.1
-upgrade_hub_prefix: 192.168.130.1:15000/daocloud
+dce_version: 2.10.1
+dce_hub_prefix: 192.168.130.1:15000/daocloud
 ```
 #### 2. pull新版dce镜像(所有manager, worker节点) ####
 ```

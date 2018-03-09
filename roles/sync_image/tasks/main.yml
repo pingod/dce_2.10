@@ -7,7 +7,7 @@
     group: root
     mode: 0755
 
-- name: pull dce {{ upgrade_version }}
+- name: pull dce {{ dce_version }}
   shell: bash /tmp/sync_image.sh
 
 - name: clean dce_upgrade.sh

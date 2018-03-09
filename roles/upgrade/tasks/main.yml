@@ -10,8 +10,8 @@
   delay: "{{ DELAY }}"
   ignore_errors: true
 
-- fail: msg="already {{ upgrade_version }}"
-  when: WEBPAGE.json.DCEVersion == upgrade_version 
+- fail: msg="already {{ dce_version }}"
+  when: WEBPAGE.json.DCEVersion == dce_version 
   tags: fail_tag
 
 - name: KUBELET_VERSION
@@ -40,7 +40,7 @@
   shell: docker rm -f dce-bootstrap > /dev/null 2>&1
   ignore_errors: true
 
-- name: upgrade dce {{ upgrade_version }}
+- name: upgrade dce {{ dce_version }}
   shell: >
          docker run 
          --name dce-bootstrap 
@@ -53,7 +53,7 @@
          -e HOST_HOSTNAME="{{ HOST_HOSTNAME }}"  
          -e FIREWALLD_STATE="{{ FIREWALLD_STATE }}" 
          -e SELINUX_MODE="{{ SELINUX_MODE }}" 
-         daocloud.io/daocloud/dce:{{ upgrade_version }} 
+         daocloud.io/daocloud/dce:{{ dce_version }} 
          do-upgrade --quiet
   retries: "{{ RETRIES }}"
   delay: "{{ DELAY }}"

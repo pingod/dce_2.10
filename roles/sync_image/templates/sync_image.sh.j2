@@ -17,7 +17,7 @@ dce-kube-pause
 dce-hly"
 for image in $dce_images
 do
-	docker pull {{ upgrade_hub_prefix }}/$image:{{ upgrade_version }}
-	docker tag {{ upgrade_hub_prefix }}/$image:{{ upgrade_version }} daocloud.io/daocloud/$image:{{ upgrade_version }}
-	docker rmi -f {{ upgrade_hub_prefix }}/$image:{{ upgrade_version }}
+	docker pull {{ dce_hub_prefix }}/$image:{{ dce_version }}
+	docker tag {{ dce_hub_prefix }}/$image:{{ dce_version }} daocloud.io/daocloud/$image:{{ dce_version }}
+	docker rmi -f {{ dce_hub_prefix }}/$image:{{ dce_version }}
 done

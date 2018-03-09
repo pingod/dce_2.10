@@ -17,9 +17,9 @@
   when: NETWORK_BIP != '172.17.0.1/16'
 
 - name: update network docker_gwbridge {{ NETWORK_DOCKER_GWBRIDGE }} 
-  shell: docker network rm docker_gwbridge && docker network create --subnet {{ NETWORK_DOCKER_GWBRIDGE }} --opt com.docker.network.bridge.name=docker_gwbridge  --opt com.docker.network.bridge.enable_icc=false docker_gwbridge
+  shell: docker network rm docker_gwbridge 2>/dev/null; docker network create --subnet {{ NETWORK_DOCKER_GWBRIDGE }} --opt com.docker.network.bridge.name=docker_gwbridge  --opt com.docker.network.bridge.enable_icc=false docker_gwbridge
   when: NETWORK_DOCKER_GWBRIDGE != '172.18.0.0/16'
 
 - name: update network dce_default {{ NETWORK_DCE_DEFAULT }} 
-  shell: docker network rm dce_default && docker network create --subnet {{ NETWORK_DCE_DEFAULT }} dce_default
+  shell: docker network rm dce_default 2>/dev/null; docker network create --subnet {{ NETWORK_DCE_DEFAULT }} dce_default
   when: NETWORK_DCE_DEFAULT != '172.19.0.0/16'
