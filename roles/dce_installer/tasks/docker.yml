@@ -15,6 +15,7 @@
     section: main
     option: "{{ item.option }}"
     value: "{{ item.value }}"
+    no_extra_spaces: True
   with_items:
     - { option: skip_broken, value: 0 }
     - { option: obsoletes, value: 1 }
