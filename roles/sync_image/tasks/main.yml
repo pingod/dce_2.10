@@ -10,7 +10,7 @@
 - name: pull dce {{ dce_version }}
   shell: bash /tmp/sync_image.sh
 
-- name: clean dce_upgrade.sh
+- name: clean
   file:
     path: /tmp/sync_image.sh
     state: absent
