@@ -37,6 +37,7 @@
     method: GET
     user: "{{ vault_dce_user }}"
     password: "{{ vault_dce_password }}"
+    force_basic_auth: yes
     status_code: 200
     return_content: yes
   register: WEBPAGE
