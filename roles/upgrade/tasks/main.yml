@@ -3,6 +3,9 @@
   uri:
     url: http://{{ groups['seed'][0] }}/dce/version
     method: GET
+    user: "{{ vault_dce_user }}"
+    password: "{{ vault_dce_password }}"
+    force_basic_auth: yes
     return_content: yes
     timeout: 10
   register: WEBPAGE

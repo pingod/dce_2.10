@@ -5,6 +5,7 @@
     method: GET
     user: "{{ vault_dce_user }}"
     password: "{{ vault_dce_password }}"
+    force_basic_auth: yes
     status_code: 200
     return_content: yes
   register: WEBPAGE
@@ -38,6 +39,7 @@
     body_format: json
     user: "{{ vault_dce_user }}"
     password: "{{ vault_dce_password }}"
+    force_basic_auth: yes
     status_code: 200
     return_content: yes
   retries: "{{ RETRIES }}"
@@ -69,6 +71,7 @@
     method: DELETE
     user: "{{ vault_dce_user }}"
     password: "{{ vault_dce_password }}"
+    force_basic_auth: yes
     status_code: 200
   retries: "{{ RETRIES }}"
   delay: "{{ DELAY }}"
