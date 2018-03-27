@@ -145,10 +145,16 @@ ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt --extra-va
 - ### 离线升级 ###
 > **注意:** 使用待升级的离线源版本，离线源配置同上
 #### 1. 定义变量 ####
-dev/group_vars/all  
+- dev/group_vars/all  
 ```
 dce_version: 2.10.1
 dce_hub_prefix: 192.168.130.1:15000/daocloud
+```
+- dev/hosts
+```
+# 只需要在manager章节指定一台manager
+[manager]
+192.168.130.11
 ```
 #### 2. pull新版dce镜像(所有manager, worker节点) ####
 ```
