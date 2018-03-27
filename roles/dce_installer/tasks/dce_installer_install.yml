@@ -1,17 +1,10 @@
 ---
-- name: is hostname localhost or localhost.localdomain ?
-  shell: hostname
-  register: res_hostname
-  ignore_errors: true
-
 - include_tasks: timezone.yml
 - include_tasks: selinux.yml
 - include_tasks: firewalld.yml
 - include_tasks: hostname.yml
-  when: res_hostname.stdout in ['localhost', 'localhost.localdomain']
   tags: hostname
 - include_tasks: hosts.yml
-  when: res_hostname.stdout in ['localhost', 'localhost.localdomain']
   tags: hosts
 - include_tasks: centos7_online_repo.yml
   when: not (DCE_OFFLINE_REPO != '' and DCE_HUB_PREFIX != 'daocloud.io')
