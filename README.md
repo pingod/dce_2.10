@@ -152,8 +152,8 @@ dce_hub_prefix: 192.168.130.1:15000/daocloud
 ```
 - dev/hosts
 ```
-# 只需要在manager章节指定一台manager
-[manager]
+# 只需要在seed章节指定一台manager, 这台manager可以是非leader节点
+[seed]
 192.168.130.11
 ```
 #### 2. pull新版dce镜像(所有manager, worker节点) ####
