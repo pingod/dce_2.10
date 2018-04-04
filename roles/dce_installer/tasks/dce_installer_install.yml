@@ -2,10 +2,10 @@
 - include_tasks: timezone.yml
 - include_tasks: selinux.yml
 - include_tasks: firewalld.yml
-- include_tasks: hostname.yml
-  tags: hostname
-- include_tasks: hosts.yml
-  tags: hosts
+  #- include_tasks: hostname.yml
+  #  tags: hostname
+  #- include_tasks: hosts.yml
+  #  tags: hosts
 - include_tasks: centos7_online_repo.yml
   when: not (DCE_OFFLINE_REPO != '' and DCE_HUB_PREFIX != 'daocloud.io')
 - include_tasks: centos7_offline_repo.yml
