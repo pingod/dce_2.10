@@ -14,7 +14,8 @@ dce-kube-dns-sidecar
 dce-kube-dns
 dce-kube-dnsmasq-nanny
 dce-kube-pause
-dce-hly"
+dce-hly
+dce-vswitch"
 for image in $dce_images
 do
 	docker pull {{ dce_hub_prefix }}/$image:{{ dce_version }}
