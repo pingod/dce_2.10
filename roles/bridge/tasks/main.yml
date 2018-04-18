@@ -1,0 +1,57 @@
+- name: clear
+  file:
+    path: /etc/sysconfig/network-scripts/{{ item }}
+    state: absent
+    backup: yes
+  with_items:
+    - ifcfg-{{ bridge1["name"] }}
+    - ifcfg-{{ bridge1["ifname1"] }}
+
+- name: ifcfg-{{ bridge1["name"] }}
+  ini_file:
+    path: /etc/sysconfig/network-scripts/ifcfg-{{ bridge1["name"] }}
+    section: DEFAULT
+    option: "{{ item.option }}"
+    value: "{{ item.value }}"
+    no_extra_spaces: True
+  with_items:
+    - { option: DEVICE, value: '{{ bridge1["name"] }}' }
+    - { option: TYPE, value: Bridge }
+    - { option: BOOTPROTO, value: none }
+    - { option: ONBOOT, value: yes }
+    - { option: NM_CONTROLLED, value: no }
+    - { option: DELAY, value: 0 }
+    - { option: IPADDR, value: '{{ inventory_hostname }}' }
+    - { option: PREFIX, value: '{{ bridge1["netmask"] }}' }
+    - { option: GATEWAY, value: '{{ bridge1["gateway"] }}' }
+    - { option: DNS1, value: '{{ bridge1["dns1"] }}' }
+    - { option: DNS2, value: '{{ bridge1["dns2"] }}' }
+
+- name: ifcfg-{{ bridge1['ifname1'] }}
+  ini_file:
+    path: /etc/sysconfig/network-scripts/ifcfg-{{ bridge1['ifname1'] }}
+    section: DEFAULT
+    option: "{{ item.option }}"
+    value: "{{ item.value }}"
+    no_extra_spaces: True
+  with_items:
+    - { option: DEVICE, value: '{{ bridge1["ifname1"] }}' }
+    - { option: TYPE, value: Ethernet }
+    - { option: BOOTPROTO, value: none }
+    - { option: ONBOOT, value: yes }
+    - { option: NM_CONTROLLED, value: no }
+    - { option: BRIDGE, value: '{{ bridge1["name"] }}' }
+
+- name: clear
+  lineinfile:
+    path: /etc/sysconfig/network-scripts/{{ item }}
+    state: absent
+    regexp: '^\[DEFAULT\]$|^$'
+  with_items:
+    - ifcfg-{{ bridge1["name"] }}
+    - ifcfg-{{ bridge1['ifname1'] }}
+
+- name: restart network
+  service: 
+    name: network
+    state: restarted
