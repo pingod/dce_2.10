@@ -9,4 +9,3 @@ ansible_connection=paramiko
 [manager]
 
 [worker]
-192.168.130.12

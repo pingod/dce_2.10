@@ -67,7 +67,7 @@
 
 - name: clear dce-bootstrap
   shell: docker rm -f dce-bootstrap > /dev/null 2>&1
-  when: not WEBPAGE.content | search(inventory_hostname)
+  when: not WEBPAGE.content is search(inventory_hostname)
   ignore_errors: true
 
 - name: join cluster
@@ -92,5 +92,5 @@
   until: result.stdout.find('DCE Joined Successfully') != -1
   retries: "{{ RETRIES }}"
   delay: "{{ DELAY }}"
-  when: (not WEBPAGE.content | search(inventory_hostname))
+  when: (not WEBPAGE.content is search(inventory_hostname))
   
