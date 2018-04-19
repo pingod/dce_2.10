@@ -21,7 +21,7 @@ docker_version: 17.03.2.ce
 kubelet_version: 1.7.11
 dce_version: 2.10.2
 ## dce网络模型(calico | flannel | vswitch | none) (default calico)
-dce_network_driver: vswitch
+dce_network_driver: calico
 #########################################################
 
 
