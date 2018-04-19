@@ -59,7 +59,12 @@
     - ifcfg-{{ bridge1["name"] }}
     - ifcfg-{{ bridge1['ifname1'] }}
 
+- name: brige ok ?
+  shell: brctl show {{ bridge1["name"] }}|awk 'NR>1 {print $1, $NF}'
+  register: res_bridge1_name
+
 - name: restart network
   service: 
     name: network
     state: restarted
+  when: not (res_bridge1_name.stdout.split()[0] == bridge1["name"] and res_bridge1_name.stdout.split()[1] == bridge1["ifname1"])
