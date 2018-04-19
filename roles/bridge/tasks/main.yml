@@ -1,3 +1,11 @@
+- name: install needed network manager libs
+  yum:
+    name: '{{ item }}'
+    state: installed
+  with_items:
+    - NetworkManager-glib
+    - bridge-utils
+
 - name: clear
   file:
     path: /etc/sysconfig/network-scripts/{{ item }}
