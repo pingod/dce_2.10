@@ -58,7 +58,7 @@ dce_hub_prefix: 192.168.130.1:15000/daocloud
 ```
 
 5. 配置主机列表**dev/hosts**  
-	- seed是种子节点,用来初始化集群,只能是一个ip地址
+	- seed是集群的第一台manager节点,用来初始化集群,只能是一个ip地址
 	- manager是manager节点组
 	- worker是worker节点组
 ```
