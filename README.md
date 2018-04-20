@@ -96,8 +96,8 @@ scp dce-2.10.1.tar root@192.168.130.1:/tmp
 ```shell
 ssh root@192.168.130.1
 
-export DCE_VERSION=2.10.1
-export OS_VERSION=7.4.1708
+export DCE_VERSION=2.10.1 # 修改为要安装的dce版本
+export OS_VERSION=7.4.1708 # 修改为与操作系统匹配的版本
 tar -xvf /tmp/dce-$DCE_VERSION.tar -C /tmp
 
 cat > /etc/yum.repos.d/dce.repo <<EOF
@@ -114,6 +114,7 @@ rm -rf /etc/yum.repos.d/dce.repo
 # 以容器方式运行registry, 默认端口为15000, 既提供dce离线镜像也提供docker, k8s等依赖包
 cd /tmp/dce-$DCE_VERSION
 ./dce-installer up-installer-registry --image-path=dce-installer-registry.tar
+![离线源安装成功](picture/001.jpg)
 ```
 > iv. 测试离线源可用性
 
@@ -122,21 +123,20 @@ cd /tmp/dce-$DCE_VERSION
 > v. 设置离线环境变量
 
 dev/group_vars/all  
-注意: **离线**安装请一定正确配置变量**dce_offline_repo, dce_hub_prefix**
-``` yaml
-dce_offline_repo: http://192.168.130.1:15000/repo/centos-7.4.1708
-dce_hub_prefix: 192.168.130.1:15000/daocloud  
-```
+注意: **离线**安装请一定正确配置变量**dce_offline_repo, dce_hub_prefix**, 详见上文, 如果前面已经配置妥当，可以继续往下
 
 #### 2. dce_installer ####
+> 对应dce-installer prepare-docker
 ```
 ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt --extra-vars install_or_uninstall=install dce_installer.yml 
 ```
 #### 3. init cluster ####
+> 对应bash -c "$(docker run -i --rm -e HUB_PREFIX=<this-machine-ip>:15000/daocloud <this-machine-ip>:15000/daocloud/dce:2.10.0 install)"
 ```
 ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt --extra-vars install_or_uninstall=install seed.yml 
 ```
 #### 4. join cluster ####
+> 对应sudo bash -c "$(sudo docker run -i --rm -e HUB_PREFIX=<some-machine-ip>:15000/daocloud <some-machine-ip>:15000/daocloud/dce:2.10.0 join --token <Cluster-Token> <some-machine-ip>:2377 80)"
 ```
 ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt --extra-vars install_or_uninstall=install manager_or_worker.yml 
 ```
@@ -154,6 +154,32 @@ ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt --extra-va
 
 
 
+-------------------------------------------------------------------------------
+- ### 添加节点到己存在集群 ###
+#### 1. dce_installer ####
+> 只需在worker章节指定新worker节点ip, seed, manager都保持为空
+``` ini
+[seed]
+
+[manager]
+
+[worker]
+192.168.130.100
+192.168.130.101
+```
+> **注意:** 新主机如果主机名己经设置好，请一定通过--skip-tags hostname,hosts跳过主机名和hosts修改
+
+``` shell
+ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt --extra-vars install_or_uninstall=install dce_installer.yml --skip-tags hostname,hosts
+```
+
+#### 2. join cluster ####
+```
+ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt --extra-vars install_or_uninstall=install manager_or_worker.yml 
+```
+
+
+
 
 -------------------------------------------------------------------------------
 - ### 卸载 ###
@@ -166,7 +192,7 @@ ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt --extra-va
 ```
 ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt --extra-vars install_or_uninstall=uninstall seed.yml 
 ```
-#### 2. 卸载dce依赖包(docker, k8s) ####
+#### 3. 卸载dce依赖包(docker, k8s) ####
 ```
 ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt --extra-vars install_or_uninstall=uninstall dce_installer.yml 
 ```
