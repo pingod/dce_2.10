@@ -15,6 +15,20 @@ pip install ansible
 	- seed是种子节点,用来初始化集群,只能是一个ip地址
 	- manager是manager节点组
 	- worker是worker节点组
+```
+# 用熟悉的编辑器打找dev/hosts文件，如vim dev/hosts
+
+[seed]
+192.168.130.11
+
+[manager]
+192.168.130.12
+192.168.130.12
+
+[worker]
+192.168.130.14
+192.168.130.15
+```
 4.  定义变量
 	- **dev/group_vars/all**
 	- **dev/group_vars/vault**
