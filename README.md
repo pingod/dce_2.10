@@ -12,8 +12,8 @@ pip install ansible
 ```
 
 3. 定义变量
-	- **dev/group_vars/vault**
-> **注意:** 对于敏感数据，如远程用户名密码及dce认证用户名密码, 请直接通过以下脚本生成密文
+**dev/group_vars/vault**
+> **注意:** 修改远程用户名密码及dce认证用户名密码与实际环境匹配, 直接通过以下脚本生成密文
 ``` shell
 cat <<'EOF' > vault.sh
 VAULT_ID='myVAULT@2018'
@@ -32,8 +32,8 @@ EOF
 
 bash vault.sh
 ```
-	- **dev/group_vars/all**
-> 需要修改的主要变量
+**dev/group_vars/all**
+> 需要修改的主要变量,其它变量请安需修改
 ```
 # 组成thinpool的磁盘列表,多块磁盘用','分隔,如/dev/sdb,/dev/sdc
 thinpool_disks: /dev/sdb 
