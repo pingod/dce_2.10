@@ -1,4 +1,14 @@
-- name: install kubelet-{{ kubelet_version }} & docker-ce-{{ docker_version }}
+- name: (online) install kubelet-{{ kubelet_version }} & docker-ce-{{ docker_version }}
+  yum: 
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  with_items:
+    - kubelet-{{ kubelet_version }}
+    - docker-ce-{{ docker_version }}
+  when: dce_hub_prefix == 'daocloud.io'
+
+- name: (offline) install kubelet-{{ kubelet_version }} & docker-ce-{{ docker_version }}
   yum: 
     name: "{{ item }}"
     state: present
@@ -8,6 +18,7 @@
   with_items:
     - kubelet-{{ kubelet_version }}
     - docker-ce-{{ docker_version }}
+  when: dce_hub_prefix != 'daocloud.io'
 
 - name: yum.conf skip_broken=0, obsoletes=1
   ini_file:

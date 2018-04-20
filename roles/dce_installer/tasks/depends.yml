@@ -9,7 +9,31 @@
     - { option: skip_broken, value: 1 }
     - { option: obsoletes, value: 0 }
 
-- name: install dce depends
+- name: (online) install dce depends
+  yum: 
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  with_items:
+    - wget
+    - git
+    - net-tools
+    - bind-utils
+    - iptables-services
+    - bridge-utils
+    - bash-completion
+    - kexec-tools
+    - sos
+    - psacct
+    - chrony
+    - device-mapper-persistent-data
+    - lvm2
+    - audit
+    - socat
+    - ipvsadm
+  when: dce_hub_prefix == 'daocloud.io'
+
+- name: (offline) install dce depends
   yum: 
     name: "{{ item }}"
     state: present
@@ -33,6 +57,7 @@
     - audit
     - socat
     - ipvsadm
+  when: dce_hub_prefix != 'daocloud.io'
 
 - name: configure chrony
   template:
