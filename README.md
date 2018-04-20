@@ -13,7 +13,7 @@ pip install ansible
 
 3. 定义变量
 **dev/group_vars/vault**
-> **注意:** 修改远程用户名密码及dce认证用户名密码与实际环境匹配, 直接通过以下脚本生成密文
+> **注意:** 修改远程用户名密码及dce认证用户名密码与实际环境匹配
 ``` shell
 cat <<'EOF' > vault.sh
 VAULT_ID='myVAULT@2018'
@@ -29,9 +29,12 @@ ansible-vault encrypt_string --vault-id ~/.vault_pass.txt $ANSIBLE_PASSWORD --na
 ansible-vault encrypt_string --vault-id ~/.vault_pass.txt $DCE_USER --name 'vault_dce_user' | tee -a dev/group_vars/vault
 ansible-vault encrypt_string --vault-id ~/.vault_pass.txt $DCE_PASSWORD --name 'vault_dce_password' | tee -a dev/group_vars/vault
 EOF
-
+```
+> 直接通过以下脚本生成密文
+```
 bash vault.sh
 ```
+
 **dev/group_vars/all**
 > 需要修改的主要变量,其它变量请安需修改
 ```
