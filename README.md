@@ -19,6 +19,7 @@ cd dce_2.10
 > 以下操作都以dce_2.10为basedir
 
 4. 定义变量  
+
 **dev/group_vars/vault**
 > **注意:** 修改远程用户名密码及dce认证用户名密码与实际环境匹配
 ``` shell
