@@ -14,7 +14,9 @@ pip install ansible
 3. 下载dce_2.10 ansible playbook
 ```
 git clone https://github.com/juneau-work/dce_2.10
+cd dce_2.10
 ```
+> 以下操作都以dce_2.10为basedir
 
 4. 定义变量
 **dev/group_vars/vault**
