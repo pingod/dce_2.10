@@ -31,7 +31,7 @@
     - audit
     - socat
     - ipvsadm
-  when: dce_hub_prefix == 'daocloud.io'
+  when: DCE_HUB_PREFIX == 'daocloud.io'
 
 - name: (offline) install dce depends
   yum: 
@@ -57,7 +57,7 @@
     - audit
     - socat
     - ipvsadm
-  when: dce_hub_prefix != 'daocloud.io'
+  when: DCE_HUB_PREFIX != 'daocloud.io'
 
 - name: configure chrony
   template:
