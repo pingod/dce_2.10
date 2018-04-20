@@ -12,7 +12,7 @@ pip install ansible
 ```
 
 3. 下载dce_2.10 ansible playbook
-```
+``` shell
 git clone https://github.com/juneau-work/dce_2.10
 cd dce_2.10
 ```
@@ -39,14 +39,14 @@ ansible-vault encrypt_string --vault-id ~/.vault_pass.txt $DCE_PASSWORD --name '
 EOF
 ```
 > 执行脚本
-```
+``` shell
 bash vault.sh
 ```
 **提示**: 后期新增加集群节点时，需要更新用户认证信息
 
 **dev/group_vars/all**
 > 需要修改的主要变量,其它变量请安需修改
-```
+``` yaml
 # 组成thinpool的磁盘列表,多块磁盘用','分隔,如/dev/sdb,/dev/sdc
 thinpool_disks: /dev/sdb 
 # dce版本
@@ -61,7 +61,7 @@ dce_hub_prefix: 192.168.130.1:15000/daocloud
 	- seed是集群的第一台manager节点,用来初始化集群,只能是一个ip地址
 	- manager是manager节点组
 	- worker是worker节点组
-```
+``` ini
 # 用熟悉的编辑器打找dev/hosts文件，如vim dev/hosts
 
 [seed]
@@ -93,7 +93,7 @@ scp dce-2.10.1.tar root@192.168.130.1:/tmp
 ```
 
 > iii. 启用离线源
-```shell
+``` shell
 ssh root@192.168.130.1
 
 export DCE_VERSION=2.10.1 # 修改为要安装的dce版本
@@ -114,8 +114,8 @@ rm -rf /etc/yum.repos.d/dce.repo
 # 以容器方式运行registry, 默认端口为15000, 既提供dce离线镜像也提供docker, k8s等依赖包
 cd /tmp/dce-$DCE_VERSION
 ./dce-installer up-installer-registry --image-path=dce-installer-registry.tar
-![离线源安装成功](picture/001.jpg)
 ```
+![离线源安装成功](picture/001.jpg)
 > iv. 测试离线源可用性
 
 访问http://192.168.130.1:15000, 能成功看到目录索引则离线源配置成功
@@ -127,17 +127,17 @@ dev/group_vars/all
 
 #### 2. dce_installer ####
 > 对应dce-installer prepare-docker
-```
+``` shell
 ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt --extra-vars install_or_uninstall=install dce_installer.yml 
 ```
 #### 3. init cluster ####
 > 对应bash -c "$(docker run -i --rm -e HUB_PREFIX=<this-machine-ip>:15000/daocloud <this-machine-ip>:15000/daocloud/dce:2.10.0 install)"
-```
+``` shell
 ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt --extra-vars install_or_uninstall=install seed.yml 
 ```
 #### 4. join cluster ####
 > 对应sudo bash -c "$(sudo docker run -i --rm -e HUB_PREFIX=<some-machine-ip>:15000/daocloud <some-machine-ip>:15000/daocloud/dce:2.10.0 join --token <Cluster-Token> <some-machine-ip>:2377 80)"
-```
+``` shell
 ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt --extra-vars install_or_uninstall=install manager_or_worker.yml 
 ```
 
@@ -174,7 +174,7 @@ ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt --extra-va
 ```
 
 #### 2. join cluster ####
-```
+``` shell
 ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt --extra-vars install_or_uninstall=install manager_or_worker.yml 
 ```
 
@@ -185,15 +185,15 @@ ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt --extra-va
 - ### 卸载 ###
 > **注意:** 卸载需谨慎, 请小心操作。将install置为uninstall,如
 #### 1. 卸载manager或worker节点 ####
-```
+``` shell
 ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt --extra-vars install_or_uninstall=uninstall manager_or_worker.yml 
 ```
 #### 2. 卸载seed节点 ####
-```
+``` shell
 ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt --extra-vars install_or_uninstall=uninstall seed.yml 
 ```
 #### 3. 卸载dce依赖包(docker, k8s) ####
-```
+``` shell
 ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt --extra-vars install_or_uninstall=uninstall dce_installer.yml 
 ```
 
@@ -206,23 +206,23 @@ ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt --extra-va
 > **注意:** 使用待升级的离线源版本，离线源配置同上
 #### 1. 定义变量 ####
 - dev/group_vars/all  
-```
+``` yaml
 dce_version: 2.10.1
 dce_hub_prefix: 192.168.130.1:15000/daocloud
 ```
 - dev/hosts
-```
+``` ini
 # 只需要在seed章节指定一台manager, 这台manager可以是非leader节点
 [seed]
 192.168.130.11
 ```
 #### 2. pull新版dce镜像(所有manager, worker节点) ####
-```
+``` shell
 ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt sync_image.yml
 ```
 #### 3. 升级 ####
 > **注意:** 只需升级manager节点中的任意一台即可，待升级完成后，其它manager节点和worker节点会自动升级到对应版本
-```
+``` shell
 ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt upgrade.yml
 ```
 
