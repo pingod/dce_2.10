@@ -26,8 +26,8 @@
     - { option: DEVICE, value: '{{ bridge1["name"] }}' }
     - { option: TYPE, value: Bridge }
     - { option: BOOTPROTO, value: none }
-    - { option: ONBOOT, value: yes }
-    - { option: NM_CONTROLLED, value: no }
+    - { option: ONBOOT, value: 'yes' }
+    - { option: NM_CONTROLLED, value: 'no' }
     - { option: DELAY, value: 0 }
     - { option: IPADDR, value: '{{ inventory_hostname }}' }
     - { option: PREFIX, value: '{{ bridge1["netmask"] }}' }
