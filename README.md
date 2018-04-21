@@ -20,29 +20,29 @@ cd dce_2.10
 > 以下操作都以dce_2.10为basedir
 
 4. 配置认证信息
-	i. 复制以下内容生成vault.sh脚本
-``` shell
-cat <<'EOF' > vault.sh
-VAULT_ID='myVAULT@2018'
-echo $VAULT_ID > ~/.vault_pass.txt
+	- i. 复制以下内容生成vault.sh脚本
+	``` shell
+	cat <<'EOF' > vault.sh
+	VAULT_ID='myVAULT@2018'
+	echo $VAULT_ID > ~/.vault_pass.txt
 
-ANSIBLE_USER='root' # ssh用户名
-ANSIBLE_PASSWORD='root' # ssh用户密码
-DCE_USER='admin' # 具有admin权限的dce认证用户
-DCE_PASSWORD='admin' # 具有admin权限的dce认证用户密码
+	ANSIBLE_USER='root' # ssh用户名
+	ANSIBLE_PASSWORD='root' # ssh用户密码
+	DCE_USER='admin' # 具有admin权限的dce认证用户
+	DCE_PASSWORD='admin' # 具有admin权限的dce认证用户密码
 
-ansible-vault encrypt_string --vault-id ~/.vault_pass.txt $ANSIBLE_USER --name 'vault_ansible_user' | tee dev/group_vars/vault
-ansible-vault encrypt_string --vault-id ~/.vault_pass.txt $ANSIBLE_PASSWORD --name 'vault_ansible_password' | tee -a dev/group_vars/vault
-ansible-vault encrypt_string --vault-id ~/.vault_pass.txt $DCE_USER --name 'vault_dce_user' | tee -a dev/group_vars/vault
-ansible-vault encrypt_string --vault-id ~/.vault_pass.txt $DCE_PASSWORD --name 'vault_dce_password' | tee -a dev/group_vars/vault
-EOF
-```
-**注意:** 请务必修改脚本中的ssh用户名密码及dce认证用户名密码与实际环境匹配
-	ii. 执行脚本
-``` shell
-bash vault.sh
-```
-**提示**: 后期新增集群节点时，请通过本步骤更新用户认证信息
+	ansible-vault encrypt_string --vault-id ~/.vault_pass.txt $ANSIBLE_USER --name 'vault_ansible_user' | tee dev/group_vars/vault
+	ansible-vault encrypt_string --vault-id ~/.vault_pass.txt $ANSIBLE_PASSWORD --name 'vault_ansible_password' | tee -a dev/group_vars/vault
+	ansible-vault encrypt_string --vault-id ~/.vault_pass.txt $DCE_USER --name 'vault_dce_user' | tee -a dev/group_vars/vault
+	ansible-vault encrypt_string --vault-id ~/.vault_pass.txt $DCE_PASSWORD --name 'vault_dce_password' | tee -a dev/group_vars/vault
+	EOF
+	```
+	**注意:** 请务必修改脚本中的ssh用户名密码及dce认证用户名密码与实际环境匹配
+	- ii. 执行脚本
+	``` shell
+	bash vault.sh
+	```
+	**提示**: 后期新增集群节点时，请通过本步骤更新用户认证信息
    
    
    
@@ -91,7 +91,7 @@ cd /tmp/dce-$DCE_VERSION
 访问http://192.168.130.1:15000, 能成功看到目录索引则离线源配置成功
 
 #### 2. 定义变量 ####
-**dev/group_vars/all**
+**dev/group_vars/all**    
 注意: **离线**安装请一定正确配置变量**dce_offline_repo, dce_hub_prefix**。下面是需要修改的主要变量,其它变量请安需修改
 ``` yaml
 # 组成thinpool的磁盘列表,多块磁盘用','分隔,如/dev/sdb,/dev/sdc
