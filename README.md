@@ -57,9 +57,13 @@ cd dce_2.10
 [准备离线安装源](http://guide.daocloud.io/dce-v2.10/离线安装控制节点-13871615.html)  
 
 > ii. 上传离线安装包
-说明: 作为离线源的主机推荐独立于用于dce节点的主机，当然，如果主机资源紧张，也可以用dce节点中的某台主机作为离线源，这里用192.168.130.1
+说明: 作为离线源的主机推荐独立于用于dce节点的主机,这里用192.168.130.1
 ``` shell
 scp dce-2.10.1.tar root@192.168.130.1:/tmp
+```
+``` shell
+# 如果主机资源紧张，也可以用dce节点中的某台主机临时充当离线源, 但在离线源启用后需要执行如下prepare-docker动作安装kubelet等其它依赖包, 用实际ip替换<some-machine-ip>
+./dce-installer prepare-docker --repo-url http://<some-machine-ip>:15000/repo/centos-7.4.1708
 ```
 
 > iii. 启用离线源
