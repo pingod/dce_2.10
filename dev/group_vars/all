@@ -19,17 +19,27 @@ kubelet_version: 1.7.11
 
 
 #########################################################
-## dce网络 ##
-# dce网络模型(calico | flannel | vswitch | none) (default calico)
+## dce网络 ## 
+#如果没有网络自定义需求，通常无需修改
+# dce网络模型(calico | flannel | vswitch | none) (default calico) #
 #network_driver: calico
-# docker0 ip
+# docker0 ip #
 #network_bip: '172.17.0.1/16'
-# docker_gwbridge
+
+# docker_gwbridge #
 #network_docker_gwbridge: '172.18.0.0/16'
-# dce_default
+
+# dce_default #
 #network_dce_default: '172.19.0.0/16'
-# pod_cluster_cidr 
+
+# pod_cluster_cidr #
 #network_pod_cluster_cidr: '172.28.0.0/16'
+
+# service_cluster_ip_range #
+#network_service_cluster_ip_range: '10.96.0.0/12'
+
+# service_node_port_range #
+#network_service_node_port_range: '30000-32767'
 #########################################################
 
 
@@ -45,7 +55,7 @@ thinpool_disks: /dev/sdb
 #########################################################
 ## dce版本 ##
 # 安装和升级都在该变量指定
-dce_version: 2.10.2
+dce_version: 2.10.1-rc.1-haier
 #########################################################
 
 
@@ -54,7 +64,7 @@ dce_version: 2.10.2
 ## 离线安装相关 ##
 ## 离线安装必须正确定义dce_offline_repo, dce_hub_prefix; 在线安装, 请一定注释这两个变量
 # dce离线yum源
-dce_offline_repo: http://192.168.130.1:15000/repo/centos-7.4.1708
+#dce_offline_repo: http://192.168.130.1:15000/repo/centos-7.4.1708
 # dce离线镜像
-dce_hub_prefix: 192.168.130.1:15000/daocloud
+#dce_hub_prefix: 192.168.130.1:15000/daocloud
 #########################################################
