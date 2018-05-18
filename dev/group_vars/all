@@ -55,7 +55,7 @@ thinpool_disks: /dev/sdb
 #########################################################
 ## dce版本 ##
 # 安装和升级都在该变量指定
-dce_version: 2.10.1-rc.1-haier
+dce_version: 2.10.2-haier-1
 #########################################################
 
 
@@ -64,7 +64,16 @@ dce_version: 2.10.1-rc.1-haier
 ## 离线安装相关 ##
 ## 离线安装必须正确定义dce_offline_repo, dce_hub_prefix; 在线安装, 请一定注释这两个变量
 # dce离线yum源
-#dce_offline_repo: http://192.168.130.1:15000/repo/centos-7.4.1708
+dce_offline_repo: http://192.168.130.1:15000/repo/centos-7.4.1708
 # dce离线镜像
-#dce_hub_prefix: 192.168.130.1:15000/daocloud
+dce_hub_prefix: 192.168.130.1:15000/daocloud
 #########################################################
+
+
+
+#########################################################
+### kubelet node-ip 网卡 ##
+## 管理网络
+#net_admin: team1
+## 业务网络
+#net_business: team0
