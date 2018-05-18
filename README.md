@@ -325,7 +325,7 @@ ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt upgrade.ym
    
 -------------------------------------------------------------------------------
 ## 切换kubelet node-ip ##
-> **注意:** 请一定正确配置变量net_admin, net_business。切换node-ip需要重启kubelet, 请合理安排时间窗口
+> **注意:** 本章节针对多网卡管理业务流量分流的需求。请一定正确配置变量net_admin, net_business, 切换node-ip需要重启kubelet, 请合理安排时间窗口
 #### 1. 定义变量 ####
 - dev/group_vars/all  
 ``` yaml
