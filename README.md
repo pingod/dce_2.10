@@ -323,3 +323,39 @@ ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt upgrade.ym
    
    
    
+-------------------------------------------------------------------------------
+## 切换kubelet node-ip ##
+> **注意:** 请一定正确配置变量net_admin, net_business。切换node-ip需要重启kubelet, 请合理安排时间窗口
+#### 1. 定义变量 ####
+- dev/group_vars/all  
+``` yaml
+## 管理网络
+net_admin: team1
+## 业务网络
+net_business: team0
+```
+- dev/hosts
+``` ini
+[seed]
+192.168.130.13
+
+[manager]
+192.168.130.11
+192.168.130.12
+
+[worker]
+192.168.130.14
+192.168.130.15
+192.168.130.16
+192.168.130.17
+192.168.130.18
+```
+#### 2. 切换kubelet node-ip ####
+``` shell
+ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt node_ip.yml
+```
+   
+   
+   
+   
+   
