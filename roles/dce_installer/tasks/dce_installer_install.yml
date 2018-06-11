@@ -7,8 +7,10 @@
 - include_tasks: hosts.yml
   tags: hosts
 - include_tasks: centos7_online_repo.yml
+  tags: repo
   when: not (DCE_OFFLINE_REPO != '' and DCE_HUB_PREFIX != 'daocloud.io')
 - include_tasks: centos7_offline_repo.yml
+  tags: repo
   when: DCE_OFFLINE_REPO != '' and DCE_HUB_PREFIX != 'daocloud.io'
 - include_tasks: depends.yml
   tags: depends
