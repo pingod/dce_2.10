@@ -1,12 +1,11 @@
 ---
-- set_fact: source_ip="{{ hostvars[inventory_hostname]['ansible_'+net_admin]['ipv4']['address'] }}"
-- set_fact: target_ip="{{ hostvars[inventory_hostname]['ansible_'+net_business]['ipv4']['address'] }}"
-
-- replace:
-    path: /etc/systemd/system/kubelet.service.d/10-dce.conf
-    regexp: '{{ source_ip }}'
-    replace: '{{ target_ip }}'
-    backup: yes
+- name: sync 20-dce.conf
+  template:
+    src: 20-dce.conf.j2
+    dest:  /etc/systemd/system/kubelet.service.d/20-dce.conf
+    owner: root
+    group: root
+    mode: 0644
   notify: restart kubelet
 
 - name: systemd daemon-reload

@@ -1,0 +1,5 @@
+[Service]
+Environment="DAEMON_ARGS=-v=2 --node-ip {{ hostvars[inventory_hostname]['ansible_'+net_business]['ipv4']['address'] }} --api-servers http://127.0.0.1:18081 --pod-infra-container-image {{ DCE_HUB_PREFIX }}/daocloud/dce-kube-pause:{{ dce_version }} --allow-privileged --node-status-update-frequency=10s --network-plugin=cni --cni-conf-dir=/etc/cni/net.d --cni-bin-dir=/opt/cni/bin --cluster-dns=10.96.0.2 --cluster-domain=cluster.local --node-labels node-role.kubernetes.io/master="
+StartLimitInterval=100s
+ExecStart=
+ExecStart=/usr/bin/kubelet $DAEMON_ARGS
