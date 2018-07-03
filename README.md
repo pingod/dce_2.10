@@ -323,3 +323,13 @@ ansible-playbook -i dev/hosts --vault-password-file ~/.vault_pass.txt node_ip.ym
    
    
    
+-------------------------------------------------------------------------------
+## 错误解决 ##
+#### 1. The following packages have pending transactions ####
+报错:
+```txt
+failed: [192.168.130.11] (item=[u'kernel-devel', u'kernel-headers']) => {"changed": false, "item": ["kernel-devel", "kernel-headers"], "msg": "The following packages have pending transactions: kernel-headers-x86_64", "rc": 125, "results": ["kernel-devel-3.10.0-693.el7.x86_64 providing kernel-devel is already installed"]}  
+```
+原因:  网络不稳定或人为等原因造成yum安装包的事务没走完，需要清理掉未完成安装的事务   
+解决: 
+> ansible -i dev/hosts all --vault-password-file ~/.vault_pass.txt -e @dev/group_vars/vault -m shell -a 'yum -y install yum-utils && yum-complete-transaction --cleanup-only'
