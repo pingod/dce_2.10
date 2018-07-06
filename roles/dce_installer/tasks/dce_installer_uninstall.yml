@@ -51,6 +51,8 @@
     - /var/lib/kubelet
     - /usr/local/bin/kubectl
     - /var/local/dce
+    - /usr/local/bin/dce-installer
+    - /usr/bin/dce-installer
 
 
 - name: thinpool
