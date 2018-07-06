@@ -78,7 +78,6 @@
     state: absent
   with_items:
     - wget
-    - git
     - bind-utils
     - iptables-services
     - bash-completion
