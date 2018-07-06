@@ -79,16 +79,13 @@
   with_items:
     - wget
     - git
-    - net-tools
     - bind-utils
     - iptables-services
-    - bridge-utils
     - bash-completion
     - kexec-tools
     - sos
     - psacct
     - chrony
-    - device-mapper-persistent-data
     - audit
     - systemd-journal-gateway
     - socat
