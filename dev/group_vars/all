@@ -73,7 +73,5 @@ dce_hub_prefix: 192.168.130.1:15000/daocloud
 
 #########################################################
 ### kubelet node-ip 网卡 ##
-## 管理网络
-#net_admin: team1
 ## 业务网络
 #net_business: team0
