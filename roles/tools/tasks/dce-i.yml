@@ -1,0 +1,6 @@
+---
+- name: update 10-dce.conf
+  replace:
+    path: /etc/systemd/system/kubelet.service.d/10-dce.conf
+    regexp: "{{ hostvars[inventory_hostname]['ansible_'+net_management]['ipv4']['address'] }}"
+    replace: "{{ hostvars[inventory_hostname]['ansible_'+net_business]['ipv4']['address'] }}"

@@ -1,0 +1,13 @@
+---
+- name: sync 20-dce.conf
+  template:
+    src: 20-dce.conf.j2
+    dest:  /etc/systemd/system/kubelet.service.d/20-dce.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart kubelet
+
+- name: systemd daemon-reload
+  systemd:
+    daemon-reload: yes

@@ -64,9 +64,9 @@ dce_version: 2.10.2-haier-1
 ## 离线安装相关 ##
 ## 离线安装必须正确定义dce_offline_repo, dce_hub_prefix; 在线安装, 请一定注释这两个变量
 # dce离线yum源
-dce_offline_repo: http://192.168.130.1:15000/repo/centos-7.4.1708
+#dce_offline_repo: http://192.168.130.1:15000/repo/centos-7.4.1708
 # dce离线镜像
-dce_hub_prefix: 192.168.130.1:15000/daocloud
+#dce_hub_prefix: 192.168.130.1:15000/daocloud
 #########################################################
 
 
@@ -75,3 +75,5 @@ dce_hub_prefix: 192.168.130.1:15000/daocloud
 ### kubelet node-ip 网卡 ##
 ## 业务网络
 #net_business: team0
+## 管理网络
+#net_management: team1
