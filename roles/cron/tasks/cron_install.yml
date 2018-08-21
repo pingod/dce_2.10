@@ -1,0 +1,6 @@
+- name: rm docker containers stopped. Creates an entry like "0 5 * * cmd"
+  cron:
+    name: "clear stopped containers"
+    minute: "0"
+    hour: "5"
+    job: "docker container prune -f"

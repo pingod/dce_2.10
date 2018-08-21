@@ -1,0 +1,4 @@
+- name: clear cron
+  cron:
+    name: "clear stopped containers"
+    state: absent
