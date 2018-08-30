@@ -104,3 +104,6 @@
     - systemd-journal-gateway
     - socat
     - ipvsadm
+
+- import_tasks: ntp_uninstall.yml
+  tags: ntp

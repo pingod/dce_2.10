@@ -1,7 +1,9 @@
 #########################################################
 ## 通用选项 ##
 timezone: Asia/Shanghai
-ntp_server: ntp1.aliyun.com
+ntp_servers: 
+  - ntp1.aliyun.com
+  - ntp2.aliyun.com
 domain_name: example.com
 # 主机名示例,如果ip为192.168.130.11则主机名为dce-130-11
 hostname_prefix: dce

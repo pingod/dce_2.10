@@ -14,6 +14,8 @@
   when: DCE_OFFLINE_REPO != '' and DCE_HUB_PREFIX != 'daocloud.io'
 - include_tasks: depends.yml
   tags: depends
+- import_tasks: ntp_install.yml
+  tags: ntp
 - include_tasks: docker.yml
   tags: docker
 - include_tasks: docker_network.yml
