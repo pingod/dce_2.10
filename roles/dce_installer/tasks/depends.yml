@@ -58,15 +58,3 @@
     - socat
     - ipvsadm
   when: DCE_HUB_PREFIX != 'daocloud.io'
-
-- name: configure chrony
-  template:
-    src: chrony.conf.j2
-    dest: /etc/chrony.conf
-  notify: restart chrony
-
-- name: start the chrony service
-  service:
-    name: chronyd
-    state: started
-    enabled: yes
