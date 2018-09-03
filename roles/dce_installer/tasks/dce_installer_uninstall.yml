@@ -73,13 +73,13 @@
   tags: vg_remove
 
 - name: Read device information (always use unit when probing)
-  parted: device=/dev/{{ THINPOOL_DISKS }} unit=MiB
+  parted: device={{ THINPOOL_DISKS }} unit=MiB
   register: thinpool_disk_info
   ignore_errors: true
 
 - name: Remove all partitions from disk
   parted:
-    device: /dev/{{ THINPOOL_DISKS }}
+    device: "{{ THINPOOL_DISKS }}"
     number: "{{ item.num }}"
     state: absent
   with_items:
