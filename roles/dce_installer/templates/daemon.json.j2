@@ -1,7 +1,7 @@
 {
   "storage-driver": "devicemapper",
   "storage-opts": [
-    "dm.thinpooldev=/dev/{{ VG_NAME }}/{{ THINPOOL_NAME }}",
+    "dm.thinpooldev=/dev/mapper/{{ VG_NAME | regex_replace('-', '--') }}-{{ THINPOOL_NAME | regex_replace('-', '--') }}",
     "dm.use_deferred_removal=true",
     "dm.use_deferred_deletion=true",
     "dm.basesize=50G",
@@ -10,5 +10,9 @@
   "insecure-registries": [
       "0.0.0.0/0"
   ],
-  "log-driver": "journald"
+  "log-driver": "json-file",
+  "log-opts": {
+      "max-size": "100m",
+      "max-file": "3"
+  }
 }
