@@ -31,6 +31,7 @@
     - audit
     - socat
     - ipvsadm
+    - sysstat
   when: DCE_HUB_PREFIX == 'daocloud.io'
 
 - name: (offline) install dce depends
@@ -57,4 +58,5 @@
     - audit
     - socat
     - ipvsadm
+    - sysstat
   when: DCE_HUB_PREFIX != 'daocloud.io'
