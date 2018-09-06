@@ -1,11 +1,18 @@
 ---
-- name: sync 20-dce.conf
-  template:
-    src: 20-dce.conf.j2
-    dest:  /etc/systemd/system/kubelet.service.d/20-dce.conf
+- name: copy 10-dce.conf to 20-dce.conf
+  copy:
+    src: /etc/systemd/system/kubelet.service.d/10-dce.conf
+    dest: /etc/systemd/system/kubelet.service.d/20-dce.conf
+    remote_src: yes
     owner: root
     group: root
     mode: 0644
+
+- name: update 20-dce.conf node-ip
+  replace:
+    path: /etc/systemd/system/kubelet.service.d/20-dce.conf
+    regexp: "{{ hostvars[inventory_hostname]['ansible_'+net_management]['ipv4']['address'] }}"
+    replace: "{{ hostvars[inventory_hostname]['ansible_'+net_business]['ipv4']['address'] }}"
   notify: restart kubelet
 
 - name: systemd daemon-reload
