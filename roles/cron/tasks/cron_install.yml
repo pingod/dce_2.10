@@ -1,6 +1,14 @@
-- name: rm docker containers stopped. Creates an entry like "0 5 * * cmd"
+- name: clear containers stopped 
   cron:
-    name: "clear stopped containers"
+    name: "clear containers stopped"
     minute: "0"
-    hour: "5"
+    hour: "4"
     job: "docker container prune -f"
+
+- name: clear images <none>
+  cron:
+    name: "clear images <none>"
+    minute: "0"
+    hour: "6"
+    job: docker rmi $(docker images|awk '{NR>1;if ($1=="<none>" || $2=="<none>"){print $3}}')
+

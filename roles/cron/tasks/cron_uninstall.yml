@@ -1,4 +1,8 @@
 - name: clear cron
   cron:
-    name: "clear stopped containers"
+    name: "{{ item }}"
     state: absent
+  with_items:
+    - "clear containers stopped"
+    - "clear images <none>"
+
