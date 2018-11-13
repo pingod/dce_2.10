@@ -1,0 +1,26 @@
+- name: install rngd
+  yum: 
+    name: rng-tools
+    state: present
+    update_cache: yes
+
+- name: rngd.service
+  ini_file:
+    path: /lib/systemd/system/rngd.service
+    section: Service
+    option: "{{ item.option }}"
+    value: "{{ item.value }}"
+    no_extra_spaces: True
+  with_items:
+    - { option: ExecStart, value: /sbin/rngd -f --rng-device /dev/hwrng }
+  notify: restart rngd
+
+- name: systemd daemon-reload
+  systemd:
+    daemon-reload: yes
+
+- name: start the rngd service
+  service: 
+    name: rngd 
+    state: started 
+    enabled: yes
